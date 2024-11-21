@@ -4,7 +4,9 @@ from evaluate import evaluate_model
 import os
 
 # Define the file path for the dataset
-dataset_path = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\data\Injury_risk_prevention_dataset.csv"
+#dataset_path = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\data\Injury_risk_prevention_dataset.csv"
+dataset_path = os.path.join("data", "Injury_risk_prevention_dataset.csv")
+
 
 def main():
     # Step 1: Load the dataset
