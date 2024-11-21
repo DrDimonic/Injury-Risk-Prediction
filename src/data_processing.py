@@ -7,10 +7,15 @@ def load_data(filepath):
     return pd.read_csv(filepath)
 
 def preprocess_data(data):
-    """Preprocess the data: handle missing values, scale features, etc."""
-    data = data.dropna()  # Drop rows with missing values
-    features = data.drop(columns=['injury_risk'])
-    target = data['injury_risk']
+    # Define target variable (e.g., 'currently_injured')
+    target = data['currently_injured']
+    
+    # Drop the target and other non-feature columns
+    features = data.drop(columns=['currently_injured', 'n_injuries', 'n_severe_injuries'])
+    
+    # Return features and target
+    return features, target
+
     
     scaler = StandardScaler()
     features_scaled = scaler.fit_transform(features)
