@@ -1,32 +1,43 @@
 from src.data_processing import load_data, preprocess_data
-from train import train_model
-from evaluate import evaluate_model
+from src.model_training import train_model, evaluate_model
+from src.visualization import plot_feature_importances, plot_predictions
+from sklearn.model_selection import train_test_split
+import joblib
 import os
 
-# Define the file path for the dataset
+# Define the dataset file path.
 #dataset_path = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\data\Injury_risk_prevention_dataset.csv"
 dataset_path = os.path.join("data", "Injury_risk_prevention_dataset.csv")
+model_path = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\models\trained_model.pkl"
 
 
 def main():
-    # Step 1: Load the dataset
+   # Load and preprocess the data
     print("Loading dataset...")
     data = load_data(dataset_path)
     if data is None:
         print("Failed to load the dataset.")
         return
 
-    print("Dataset loaded successfully!")
-
-    # Step 2: Preprocess the dataset
     print("Preprocessing dataset...")
-    try:
-        features, target = preprocess_data(data)
-    except KeyError as e:
-        print(f"Error during preprocessing: {e}")
-        return
+    features, target = preprocess_data(data)
 
-    print("Preprocessing complete.")
+    # Train the model
+    print("Training the model...")
+    model, X_test, y_test = train_model(features, target)
+    print("Model training complete.")
+
+    # Save the model
+    joblib.dump(model, model_path)
+    print(f"Model saved as '{model_path}'")
+
+    # Visualizations
+    print("Generating visualizations...")
+    feature_names = features.columns if hasattr(features, "columns") else [f"Feature {i}" for i in range(features.shape[1])]
+    plot_feature_importances(model, feature_names)
+    plot_predictions(model, X_test, y_test)
+    plot_confusion_matrix(model, X_test, y_test)
+    plot_actual_vs_predicted_histogram(model, X_test, y_test)
 
 if __name__ == "__main__":
     main()

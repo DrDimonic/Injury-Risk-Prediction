@@ -7,7 +7,7 @@ def load_data(filepath):
     return pd.read_csv(filepath)
 
 def preprocess_data(data):
-    # Define target variable (e.g., 'currently_injured')
+    # Define target variable
     target = data['currently_injured']
     
     # Drop the target and other non-feature columns
@@ -16,7 +16,6 @@ def preprocess_data(data):
     # Return features and target
     return features, target
 
-    
     scaler = StandardScaler()
     features_scaled = scaler.fit_transform(features)
     

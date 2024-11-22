@@ -1,17 +1,24 @@
 from src.data_processing import load_data, preprocess_data
-from src.model_training import train_model
+from src.model_training import train_model, evaluate_model
+from sklearn.model_selection import train_test_split
+import joblib
 
 def main():
     # Load and preprocess the data
-    data = load_data('data/dataset.csv')
+    data = load_data(r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\data\dataset.csv")
     features, target = preprocess_data(data)
 
-    # Train the model
-    model, X_test, y_test = train_model(features, target)
+    # Split data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
 
-    # Save the model (optional)
-    import joblib
-    joblib.dump(model, 'trained_model.pkl')
+    # Train the model
+    model = train_model(X_train, y_train)
+
+    # Evaluate the model
+    evaluate_model(model, X_test, y_test)
+
+    # Save the model for future use
+    joblib.dump(model, r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\models\trained_model.pkl")
     print("Model saved as 'trained_model.pkl'")
 
 if __name__ == "__main__":
