@@ -1,6 +1,6 @@
 from src.data_processing import load_data, preprocess_data
 from src.model_training import train_model, evaluate_model
-from src.visualization import plot_feature_importances, plot_predictions, plot_confusion_matrix, plot_actual_vs_predicted_histogram
+from src.visualization import plot_feature_importances, plot_predictions, plot_correlation_heatmap, plot_confusion_matrix, plot_actual_vs_predicted_histogram
 from sklearn.model_selection import train_test_split
 import joblib
 import os
@@ -42,6 +42,7 @@ def main():
     feature_names = features.columns if hasattr(features, "columns") else [f"Feature {i}" for i in range(features.shape[1])]
     plot_feature_importances(model, feature_names)
     plot_predictions(model, X_test, y_test)
+    plot_correlation_heatmap(data)
     plot_confusion_matrix(model, X_test, y_test) 
     plot_actual_vs_predicted_histogram(model, X_test, y_test)
 

@@ -7,10 +7,10 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 # Plot the feature importances of the model.
 def plot_feature_importances(model, feature_names):
     importances = model.feature_importances_
-    indices = np.argsort(importances)[::-1]
+    indices = range(len(importances))
     sorted_feature_names = [feature_names[i] for i in indices]
 
-    plt.figure(1) 
+    plt.figure(figsize=(10, 6))
     plt.barh(sorted_feature_names, importances[indices])
     plt.xlabel('Importance')
     plt.ylabel('Feature')
@@ -22,12 +22,31 @@ def plot_feature_importances(model, feature_names):
 def plot_predictions(model, X_test, y_test):
     predictions = model.predict(X_test)
     
-    plt.figure(2)  
+    plt.figure(figsize=(10, 6))
     plt.scatter(y_test, predictions, alpha=0.5)
+    plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--')
     plt.xlabel('Actual')
     plt.ylabel('Predicted')
     plt.title('Actual vs Predicted Values')
-    plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--')
+    plt.tight_layout()
+    plt.show()
+
+# Plot a correlation heatmap
+def plot_correlation_heatmap(data):
+    correlation_matrix = data.corr()
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(
+        correlation_matrix,
+        annot=True,
+        fmt=".2f",
+        cmap="coolwarm",
+        cbar=True,
+        square=True,
+        linewidths=0.5,
+        linecolor='black'
+    )
+
+    plt.title("Correlation Heatmap")
     plt.tight_layout()
     plt.show()
 
@@ -36,8 +55,9 @@ def plot_confusion_matrix(model, X_test, y_test):
     cm = confusion_matrix(y_test, model.predict(X_test))
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
     disp.plot(cmap=plt.cm.Blues)
+
+    plt.figure(figsize=(10, 6))
     plt.title('Confusion Matrix')
-    plt.figure(3) 
     plt.tight_layout()
     plt.show()
 
@@ -45,7 +65,7 @@ def plot_confusion_matrix(model, X_test, y_test):
 def plot_actual_vs_predicted_histogram(model, X_test, y_test):
     predictions = model.predict(X_test)
     
-    plt.figure(4)  
+    plt.figure(figsize=(10, 6))
     plt.hist(y_test, bins=20, alpha=0.5, label='Actual')
     plt.hist(predictions, bins=20, alpha=0.5, label='Predicted')
     plt.xlabel('Value')
