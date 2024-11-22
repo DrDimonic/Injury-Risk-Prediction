@@ -20,11 +20,11 @@ def main():
         return
 
     print("Preprocessing dataset...")
-    features, target = preprocess_data(data)
+    X_train_balanced, X_test, y_train_balanced, y_test = preprocess_data(data)
 
     # Train the model
     print("Training the model...")
-    model, X_test, y_test = train_model(features, target)
+    model = train_model(X_train_balanced, y_train_balanced)
     print("Model training complete.")
 
     # Ensure the 'models' directory exists
@@ -39,12 +39,15 @@ def main():
 
     # Visualizations
     print("Generating visualizations...")
-    feature_names = features.columns if hasattr(features, "columns") else [f"Feature {i}" for i in range(features.shape[1])]
+    feature_names = features.columns if hasattr(X_train_balanced, "columns") else [f"Feature {i}" for i in range(X_train_balanced.shape[1])]
     plot_feature_importances(model, feature_names)
     plot_predictions(model, X_test, y_test)
     plot_correlation_heatmap(data)
     plot_confusion_matrix(model, X_test, y_test) 
     plot_actual_vs_predicted_histogram(model, X_test, y_test)
+    print(target.value_counts())
 
 if __name__ == "__main__":
     main()
+
+
