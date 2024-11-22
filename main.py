@@ -1,9 +1,10 @@
 from src.data_processing import load_data, preprocess_data
-from src.model_training import train_model, evaluate_model
-from src.visualization import plot_feature_importances, plot_predictions, plot_correlation_heatmap, plot_confusion_matrix, plot_actual_vs_predicted_histogram
+from src.model_training import train_model, evaluate_model, cross_validate_model, compare_models
+from src.visualization import plot_feature_importances, plot_predictions, plot_confusion_matrix, plot_actual_vs_predicted_histogram, plot_correlation_heatmap
 from sklearn.model_selection import train_test_split
-import joblib
+from imblearn.over_sampling import SMOTE
 import os
+import joblib
 
 # Define the dataset file path.
 #dataset_path = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\data\Injury_risk_prevention_dataset.csv"
@@ -21,30 +22,48 @@ def main():
     
     features, target = preprocess_data(data)
 
-    # Train the model
-    print("Training the model...")
-    model = train_model(features, target)
-    print("Model training complete.")
+    # Balance the data
+    smote = SMOTE(random_state=42)
+    X_balanced, y_balanced = smote.fit_resample(features, target)
+
+    # Train-test split
+    X_train, X_test, y_train, y_test = train_test_split(X_balanced, y_balanced, test_size=0.3, random_state=42)
+
+    # Perform cross-validation
+    print("Performing cross-validation...")
+    cross_validate_model(features, target)
+
+    # Train the Random Forest model
+    print("Training the Random Forest model...")
+    model = train_model(X_train, y_train)
 
     # Save the model
-    os.makedirs("models", exist_ok=True)
     joblib.dump(model, model_path)
-    print(f"Model saved to: {model_path}")
-
-    # Split the data for evaluation
-    X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.3, random_state=42)
+    print(f"Model saved as '{model_path}'")
 
     # Evaluate the model
+    print("Evaluating the Random Forest model...")
     evaluate_model(model, X_test, y_test)
 
-    # Visualizations
-    print("Generating visualizations...")
+    # Compare models
+    print("Comparing models...")
+    compare_models(X_train, y_train, X_test, y_test)
+
+   # Visualizations for Random Forest
+    print("Generating visualizations for Random Forest...")
     feature_names = features.columns if hasattr(features, "columns") else [f"Feature {i}" for i in range(features.shape[1])]
     plot_feature_importances(model, feature_names)
     plot_predictions(model, X_test, y_test)
-    plot_correlation_heatmap(data)
-    plot_confusion_matrix(model, X_test, y_test) 
+    plot_confusion_matrix(model, X_test, y_test)
     plot_actual_vs_predicted_histogram(model, X_test, y_test)
+
+    # Visualizations for Logistic Regression
+    print("Generating visualizations for Logistic Regression...")
+    logreg = LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42)
+    logreg.fit(X_train, y_train)
+    plot_predictions(logreg, X_test, y_test)
+    plot_confusion_matrix(logreg, X_test, y_test)
+    plot_actual_vs_predicted_histogram(logreg, X_test, y_test)
 
 
 if __name__ == "__main__":

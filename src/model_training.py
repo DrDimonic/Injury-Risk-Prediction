@@ -1,38 +1,48 @@
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, accuracy_score
-from imblearn.under_sampling import EditedNearestNeighbours
-from imblearn.combine import SMOTEENN
-from sklearn.model_selection import GridSearchCV
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.model_selection import cross_val_score
 
-# Train a Random Forest model using balanced data.
+# Random Forest model.
 def train_model(X_train, y_train):
-    smote_enn = SMOTEENN(random_state=42)
-    X_train_balanced, y_train_balanced = smote_enn.fit_resample(X_train, y_train)
+    model = RandomForestClassifier(n_estimators=100, random_state=42, class_weight='balanced')
+    model.fit(X_train, y_train)
+    return model
 
-    # Define Random Forest model
-    rf_model = RandomForestClassifier(random_state=42, class_weight='balanced')
-
-    # Define hyperparameters for tuning
-    param_grid = {
-        'n_estimators': [50, 100, 200],
-        'max_depth': [None, 10, 20, 30],
-        'min_samples_split': [2, 5, 10],
-        'min_samples_leaf': [1, 2, 4],
-    }
-
-    # Perform grid search for best hyperparameters
-    grid_search = GridSearchCV(rf_model, param_grid, cv=3, scoring='f1_macro', n_jobs=-1)
-    grid_search.fit(X_train_balanced, y_train_balanced)
-
-    best_model = grid_search.best_estimator_
-    return best_model
-
-# Evaluate the model on the test data.
+# Evaluate the model using test data.
 def evaluate_model(model, X_test, y_test):
-    
     predictions = model.predict(X_test)
-    accuracy = accuracy_score(y_test, predictions)
-    print("Model Accuracy:", accuracy)
     print("Classification Report:")
     print(classification_report(y_test, predictions))
-    return accuracy
+    print("Confusion Matrix:")
+    print(confusion_matrix(y_test, predictions))
+
+# Perform cross-validation on Random Forest.
+def cross_validate_model(features, target):
+    
+    model = RandomForestClassifier(n_estimators=100, random_state=42, class_weight='balanced')
+    cv_scores = cross_val_score(model, features, target, cv=5, scoring='f1_macro')
+    print("Cross-validation F1 scores:", cv_scores)
+    print("Mean F1 score:", cv_scores.mean())
+
+    
+# Logistic Regression model
+def compare_models(X_train, y_train, X_test, y_test):
+    """Train and compare Logistic Regression and Random Forest models."""
+    
+    logreg = LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42)
+    logreg.fit(X_train, y_train)
+    logreg_predictions = logreg.predict(X_test)
+    print("Logistic Regression Classification Report:")
+    print(classification_report(y_test, logreg_predictions))
+    print("Confusion Matrix:")
+    print(confusion_matrix(y_test, logreg_predictions))
+
+    # Random Forest
+    rf_model = RandomForestClassifier(n_estimators=100, random_state=42, class_weight='balanced')
+    rf_model.fit(X_train, y_train)
+    rf_predictions = rf_model.predict(X_test)
+    print("Random Forest Classification Report:")
+    print(classification_report(y_test, rf_predictions))
+    print("Confusion Matrix:")
+    print(confusion_matrix(y_test, rf_predictions))
