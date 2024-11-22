@@ -9,15 +9,11 @@ def train_model(X_train, y_train):
     model.fit(X_train, y_train)
     return model
 
-"""
+
 # Evaluate the model using test data.
 def evaluate_model(model, X_test, y_test):
     predictions = model.predict(X_test)
-    print("Classification Report:")
-    print(classification_report(y_test, predictions))
-    print("Confusion Matrix:")
-    print(confusion_matrix(y_test, predictions))
-"""
+    
     
 # Perform cross-validation on Random Forest.
 def cross_validate_model(features, target):
