@@ -37,8 +37,8 @@ def plot_confusion_matrix(model, X_test, y_test):
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
     disp.plot(cmap=plt.cm.Blues)
     plt.title('Confusion Matrix')
-    plt.tight_layout()
     plt.figure(3) 
+    plt.tight_layout()
     plt.show()
 
 # Plot histogram of actual vs predicted values.
