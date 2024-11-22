@@ -1,3 +1,4 @@
+import pandas as pd
 from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTE
 
@@ -6,7 +7,6 @@ def load_data(filepath):
     return pd.read_csv(filepath)
 
 def preprocess_data(data):
-    """Preprocess the dataset."""
     # Feature and target separation
     features = data.drop(columns=["currently_injured"])
     target = data["currently_injured"]
