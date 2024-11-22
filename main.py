@@ -12,38 +12,34 @@ model_path = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\models\
 
 
 def main():
-   # Load the data
-    print("Loading dataset...")
+   # Load and preprocess the dataset
+    print("Loading and preprocessing dataset...")
     data = load_data(dataset_path)
     if data is None:
-        print("Failed to load the dataset.")
+        print("Dataset could not be loaded.")
         return
-
-    # Preprocess the dataset
-    print("Preprocessing dataset...")
-    X_train_balanced, X_test, y_train_balanced, y_test = preprocess_data(data)
+    
+    features, target = preprocess_data(data)
 
     # Train the model
     print("Training the model...")
-    model = train_model(X_train_balanced, y_train_balanced)
+    model = train_model(features, target)
     print("Model training complete.")
 
-    # Ensure the 'models' directory exists
-    models_dir = os.path.dirname(model_path)
-    if not os.path.exists(models_dir):
-        os.makedirs(models_dir)
-        print(f"Created directory: {models_dir}")
-
     # Save the model
+    os.makedirs("models", exist_ok=True)
     joblib.dump(model, model_path)
-    print(f"Model saved as '{model_path}'")
+    print(f"Model saved to: {model_path}")
+
+    # Split the data for evaluation
+    X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.3, random_state=42)
 
     # Evaluate the model
     evaluate_model(model, X_test, y_test)
 
     # Visualizations
     print("Generating visualizations...")
-    feature_names = X_train_balanced.columns if hasattr(X_train_balanced, "columns") else [f"Feature {i}" for i in range(X_train_balanced.shape[1])]
+    feature_names = features.columns if hasattr(features, "columns") else [f"Feature {i}" for i in range(features.shape[1])]
     plot_feature_importances(model, feature_names)
     plot_predictions(model, X_test, y_test)
     plot_correlation_heatmap(data)
