@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import seaborn as sns
 import numpy as np
 import pandas as pd
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
@@ -41,6 +42,7 @@ def plot_confusion_matrix(model, X_test, y_test):
     cm = confusion_matrix(y_test, predictions)
     disp = ConfusionMatrixDisplay(confusion_matrix=cm)
     disp.plot(cmap="Blues", values_format="d")
+
     plt.title("Confusion Matrix", fontsize=16)
     plt.show()
 
@@ -49,12 +51,12 @@ def plot_actual_vs_predicted_histogram(model, X_test, y_test):
     predictions = model.predict(X_test)
 
     plt.figure(figsize=(10, 6))
-    plt.hist(y_test, bins=10, alpha=0.6, color="blue", label="Actual", edgecolor="black")
-    plt.hist(predictions, bins=10, alpha=0.6, color="red", label="Predicted", edgecolor="black")
-    plt.title("Actual vs Predicted Histogram", fontsize=16)
-    plt.xlabel("Injury Risk", fontsize=14)
-    plt.ylabel("Frequency", fontsize=14)
-    plt.legend(fontsize=12)
+    sns.histplot(y_test, color="blue", label="Actual", kde=True, stat="density", alpha=0.5)
+    sns.histplot(predictions, color="orange", label="Predicted", kde=True, stat="density", alpha=0.5)
+    plt.xlabel("Values")
+    plt.ylabel("Density")
+    plt.title("Actual vs Predicted Histogram")
+    plt.legend()
     plt.tight_layout()
     plt.show()
 
