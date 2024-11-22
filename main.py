@@ -29,7 +29,7 @@ def main():
 
     # Train the Random Forest model
     print("Training the Random Forest model...")
-    model = train_model(X_train, y_train)
+    model = train_random_forest(X_train, y_train)
 
     # Save the model
     joblib.dump(model, model_path)
