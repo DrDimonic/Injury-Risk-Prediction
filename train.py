@@ -8,9 +8,6 @@ def main():
     data = load_data(r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\data\dataset.csv")
     features, target = preprocess_data(data)
 
-    # Split data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
-
     # Train the model
     model = train_model(X_train, y_train)
 

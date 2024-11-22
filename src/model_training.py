@@ -9,6 +9,7 @@ def train_model(X_train, y_train):
     model.fit(X_train, y_train)
     return model
 
+"""
 # Evaluate the model using test data.
 def evaluate_model(model, X_test, y_test):
     predictions = model.predict(X_test)
@@ -16,7 +17,8 @@ def evaluate_model(model, X_test, y_test):
     print(classification_report(y_test, predictions))
     print("Confusion Matrix:")
     print(confusion_matrix(y_test, predictions))
-
+"""
+    
 # Perform cross-validation on Random Forest.
 def cross_validate_model(features, target):
     
@@ -26,11 +28,11 @@ def cross_validate_model(features, target):
     print("Mean F1 score:", cv_scores.mean())
 
     
-# Logistic Regression model
+# Compare Logistic Regression and Random Forest models.
 def compare_models(X_train, y_train, X_test, y_test):
-    """Train and compare Logistic Regression and Random Forest models."""
     
-    logreg = LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42)
+    # Logistic Regression 
+    logreg = LogisticRegression(class_weight='balanced', max_iter=2000, random_state=42)
     logreg.fit(X_train, y_train)
     logreg_predictions = logreg.predict(X_test)
     print("Logistic Regression Classification Report:")

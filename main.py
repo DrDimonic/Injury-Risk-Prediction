@@ -2,7 +2,8 @@ from src.data_processing import load_data, preprocess_data
 from src.model_training import train_model, evaluate_model, cross_validate_model, compare_models
 from src.visualization import plot_feature_importances, plot_predictions, plot_confusion_matrix, plot_actual_vs_predicted_histogram, plot_correlation_heatmap
 from sklearn.model_selection import train_test_split
-from imblearn.over_sampling import SMOTE
+from sklearn.linear_model import LogisticRegression
+
 import os
 import joblib
 
@@ -20,18 +21,11 @@ def main():
         print("Dataset could not be loaded.")
         return
     
-    features, target = preprocess_data(data)
-
-    # Balance the data
-    smote = SMOTE(random_state=42)
-    X_balanced, y_balanced = smote.fit_resample(features, target)
-
-    # Train-test split
-    X_train, X_test, y_train, y_test = train_test_split(X_balanced, y_balanced, test_size=0.3, random_state=42)
+    X_train, X_test, y_train, y_test = preprocess_data(data)
 
     # Perform cross-validation
     print("Performing cross-validation...")
-    cross_validate_model(features, target)
+    cross_validate_model(X_train, y_train)
 
     # Train the Random Forest model
     print("Training the Random Forest model...")
@@ -49,9 +43,9 @@ def main():
     print("Comparing models...")
     compare_models(X_train, y_train, X_test, y_test)
 
-   # Visualizations for Random Forest
+    # Visualizations for Random Forest
     print("Generating visualizations for Random Forest...")
-    feature_names = features.columns if hasattr(features, "columns") else [f"Feature {i}" for i in range(features.shape[1])]
+    feature_names = data.columns[:-1]  # Adjust based on dataset
     plot_feature_importances(model, feature_names)
     plot_predictions(model, X_test, y_test)
     plot_confusion_matrix(model, X_test, y_test)
@@ -64,7 +58,6 @@ def main():
     plot_predictions(logreg, X_test, y_test)
     plot_confusion_matrix(logreg, X_test, y_test)
     plot_actual_vs_predicted_histogram(logreg, X_test, y_test)
-
 
 if __name__ == "__main__":
     main()
