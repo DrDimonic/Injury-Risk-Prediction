@@ -1,5 +1,5 @@
 from src.data_processing import load_data, preprocess_data
-from src.model_training import train_model, evaluate_model, cross_validate_model, compare_models
+from src.model_training import train_random_forest, train_logistic_regression, evaluate_model, cross_validate_model, compare_models
 from src.visualization import plot_feature_importances, plot_predictions, plot_confusion_matrix, plot_actual_vs_predicted_histogram, plot_correlation_heatmap
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -45,16 +45,19 @@ def main():
 
     # Visualizations for Random Forest
     print("Generating visualizations for Random Forest...")
-    feature_names = data.columns[:-1]  # Adjust based on dataset
+    feature_names = data.columns[:-1] 
     plot_feature_importances(model, feature_names)
+    plot_correlation_heatmap(data)
     plot_predictions(model, X_test, y_test)
     plot_confusion_matrix(model, X_test, y_test)
     plot_actual_vs_predicted_histogram(model, X_test, y_test)
 
     # Visualizations for Logistic Regression
     print("Generating visualizations for Logistic Regression...")
-    logreg = LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42)
+    logreg = LogisticRegression(class_weight='balanced', max_iter=5000, random_state=42)
     logreg.fit(X_train, y_train)
+    plot_feature_importances(model, feature_names)
+    plot_correlation_heatmap(data)
     plot_predictions(logreg, X_test, y_test)
     plot_confusion_matrix(logreg, X_test, y_test)
     plot_actual_vs_predicted_histogram(logreg, X_test, y_test)

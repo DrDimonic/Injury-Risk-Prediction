@@ -17,7 +17,7 @@ def train_logistic_regression(X_train, y_train):
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
 
-    logreg = LogisticRegression(solver='lbfgs', max_iter=10000, class_weight='balanced', random_state=42)
+    logreg = LogisticRegression(solver='lbfgs', max_iter=5000, class_weight='balanced', random_state=42)
     logreg.fit(X_train_scaled, y_train)
 
     return logreg, scaler
