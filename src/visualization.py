@@ -35,9 +35,8 @@ def plot_predictions(model, X_test, y_test):
 def plot_confusion_matrix(model, X_test, y_test):
     cm = confusion_matrix(y_test, model.predict(X_test))
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
-    
-    plt.figure(3) 
     disp.plot(cmap=plt.cm.Blues)
+    plt.figure(3) 
     plt.title('Confusion Matrix')
     plt.tight_layout()
     plt.show()
