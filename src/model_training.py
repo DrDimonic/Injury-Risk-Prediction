@@ -6,7 +6,6 @@ from sklearn.preprocessing import StandardScaler
 
 # Random Forest model.
 def train_random_forest(X_train, y_train):
-    """Train a Random Forest model."""
     model = RandomForestClassifier(n_estimators=100, random_state=42, class_weight='balanced')
     model.fit(X_train, y_train)
     return model
