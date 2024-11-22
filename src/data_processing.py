@@ -1,6 +1,10 @@
 from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTE
 
+def load_data(filepath):
+    # Load data from a CSV file.
+    return pd.read_csv(filepath)
+
 def preprocess_data(data):
     """Preprocess the dataset."""
     # Feature and target separation
@@ -15,4 +19,3 @@ def preprocess_data(data):
     X_train, X_test, y_train, y_test = train_test_split(features_balanced, target_balanced, test_size=0.3, random_state=42)
 
     return X_train, X_test, y_train, y_test
-
