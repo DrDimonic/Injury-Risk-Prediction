@@ -12,13 +12,14 @@ model_path = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\models\
 
 
 def main():
-   # Load and preprocess the data
+   # Load the data
     print("Loading dataset...")
     data = load_data(dataset_path)
     if data is None:
         print("Failed to load the dataset.")
         return
 
+    # Preprocess the dataset
     print("Preprocessing dataset...")
     X_train_balanced, X_test, y_train_balanced, y_test = preprocess_data(data)
 
@@ -37,15 +38,18 @@ def main():
     joblib.dump(model, model_path)
     print(f"Model saved as '{model_path}'")
 
+    # Evaluate the model
+    evaluate_model(model, X_test, y_test)
+
     # Visualizations
     print("Generating visualizations...")
-    feature_names = features.columns if hasattr(X_train_balanced, "columns") else [f"Feature {i}" for i in range(X_train_balanced.shape[1])]
+    feature_names = X_train_balanced.columns if hasattr(X_train_balanced, "columns") else [f"Feature {i}" for i in range(X_train_balanced.shape[1])]
     plot_feature_importances(model, feature_names)
     plot_predictions(model, X_test, y_test)
     plot_correlation_heatmap(data)
     plot_confusion_matrix(model, X_test, y_test) 
     plot_actual_vs_predicted_histogram(model, X_test, y_test)
-    print(target.value_counts())
+
 
 if __name__ == "__main__":
     main()
