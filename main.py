@@ -27,6 +27,12 @@ def main():
     model, X_test, y_test = train_model(features, target)
     print("Model training complete.")
 
+    # Ensure the 'models' directory exists
+    models_dir = os.path.dirname(model_path)
+    if not os.path.exists(models_dir):
+        os.makedirs(models_dir)
+        print(f"Created directory: {models_dir}")
+
     # Save the model
     joblib.dump(model, model_path)
     print(f"Model saved as '{model_path}'")
