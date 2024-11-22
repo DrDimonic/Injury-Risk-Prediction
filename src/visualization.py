@@ -4,58 +4,54 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
-# Plot the feature importances from a trained model.
+# Plot the feature importances of the model.
 def plot_feature_importances(model, feature_names):
-    if not hasattr(model, "feature_importances_"):
-        print("The model does not have feature importances.")
-        return
-
     importances = model.feature_importances_
     indices = np.argsort(importances)[::-1]
+    sorted_feature_names = [feature_names[i] for i in indices]
 
-    plt.figure(figsize=(10, 6))
-    plt.title("Feature Importances", fontsize=16)
-    plt.bar(range(len(importances)), importances[indices], align="center")
-    plt.xticks(range(len(importances)), [feature_names[i] for i in indices], rotation=90, fontsize=10)
-    plt.xlabel("Features", fontsize=14)
-    plt.ylabel("Importance Score", fontsize=14)
+    plt.figure(1) 
+    plt.barh(sorted_feature_names, importances[indices])
+    plt.xlabel('Importance')
+    plt.ylabel('Feature')
+    plt.title('Feature Importances')
     plt.tight_layout()
     plt.show()
 
-# Plot predictions versus actual values.
+# Plot actual vs predicted values.
 def plot_predictions(model, X_test, y_test):
     predictions = model.predict(X_test)
-
-    plt.figure(figsize=(10, 6))
-    plt.scatter(range(len(y_test)), y_test, color="blue", label="Actual", alpha=0.6)
-    plt.scatter(range(len(predictions)), predictions, color="red", label="Predicted", alpha=0.6)
-    plt.title("Predictions vs Actual Values", fontsize=16)
-    plt.xlabel("Sample Index", fontsize=14)
-    plt.ylabel("Injury Risk", fontsize=14)
-    plt.legend(fontsize=12)
+    
+    plt.figure(2)  
+    plt.scatter(y_test, predictions, alpha=0.5)
+    plt.xlabel('Actual')
+    plt.ylabel('Predicted')
+    plt.title('Actual vs Predicted Values')
+    plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--')
     plt.tight_layout()
     plt.show()
 
-# Plot a confusion matrix for the test data.
+# Plot the confusion matrix.
 def plot_confusion_matrix(model, X_test, y_test):
-    predictions = model.predict(X_test)
-    cm = confusion_matrix(y_test, predictions)
-    disp = ConfusionMatrixDisplay(confusion_matrix=cm)
-    disp.plot(cmap="Blues", values_format="d")
-
-    plt.title("Confusion Matrix", fontsize=16)
+    cm = confusion_matrix(y_test, model.predict(X_test))
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
+    
+    plt.figure(3) 
+    disp.plot(cmap=plt.cm.Blues)
+    plt.title('Confusion Matrix')
+    plt.tight_layout()
     plt.show()
 
-# Plot a histogram comparing actual and predicted values.
-def plot_actual_vs_predicted_histogram(model, X_test, y_test): 
+# Plot histogram of actual vs predicted values.
+def plot_actual_vs_predicted_histogram(model, X_test, y_test):
     predictions = model.predict(X_test)
-
-    plt.figure(figsize=(10, 6))
-    sns.histplot(y_test, color="blue", label="Actual", kde=True, stat="density", alpha=0.5)
-    sns.histplot(predictions, color="orange", label="Predicted", kde=True, stat="density", alpha=0.5)
-    plt.xlabel("Values")
-    plt.ylabel("Density")
-    plt.title("Actual vs Predicted Histogram")
+    
+    plt.figure(4)  
+    plt.hist(y_test, bins=20, alpha=0.5, label='Actual')
+    plt.hist(predictions, bins=20, alpha=0.5, label='Predicted')
+    plt.xlabel('Value')
+    plt.ylabel('Frequency')
+    plt.title('Histogram of Actual vs Predicted')
     plt.legend()
     plt.tight_layout()
     plt.show()
