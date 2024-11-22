@@ -7,7 +7,7 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 # Plot the feature importances of the model.
 def plot_feature_importances(model, feature_names):
     importances = model.feature_importances_
-    indices = range(len(importances))
+    indices = np.argsort(importances)[::-1]
     sorted_feature_names = [feature_names[i] for i in indices]
 
     plt.figure(figsize=(10, 6))
@@ -55,8 +55,6 @@ def plot_confusion_matrix(model, X_test, y_test):
     cm = confusion_matrix(y_test, model.predict(X_test))
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
     disp.plot(cmap=plt.cm.Blues)
-
-    plt.figure(figsize=(10, 6))
     plt.title('Confusion Matrix')
     plt.tight_layout()
     plt.show()
