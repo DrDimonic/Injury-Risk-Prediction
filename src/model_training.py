@@ -28,7 +28,7 @@ def cross_validate_model(features, target):
 def compare_models(X_train, y_train, X_test, y_test):
     
     # Logistic Regression 
-    logreg = LogisticRegression(class_weight='balanced', max_iter=5000, solver = 'saga', random_state=42)
+    logreg = LogisticRegression( solver = 'lbfgs', max_iter=5000, class_weight='balanced', random_state=42, C=10)
     logreg.fit(X_train, y_train)
     logreg_predictions = logreg.predict(X_test)
     print("Logistic Regression Classification Report:")
