@@ -30,6 +30,7 @@ def plot_feature_importances(model, feature_names):
     plt.ylabel('Feature')
     plt.title(f'Figure {get_figure_number()}: Feature Importances')
     plt.tight_layout()
+    plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
     plt.show()
     increment_figure_counter()
 
@@ -50,6 +51,7 @@ def plot_correlation_heatmap(data):
     )
     plt.title(f'Figure {get_figure_number()}: Correlation Heatmap')
     plt.tight_layout()
+    plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
     plt.show()  
     increment_figure_counter()
 
@@ -68,6 +70,7 @@ def plot_scatter(model, X_test, y_test):
     plt.title(f'Figure {get_figure_number()}: Scatter Plot: Predicted vs Actual')
     plt.grid(True)
     plt.tight_layout()
+    plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
     plt.show()
     increment_figure_counter()
 
@@ -98,6 +101,7 @@ def plot_3d_predictions(model, X_test, y_test, feature_names):
     plt.colorbar(scatter, label='Actual Class')
     plt.title(f'Figure {get_figure_number()}: 3D Scatter Plot: Predictions')
     plt.tight_layout()
+    plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
     plt.show()  
     increment_figure_counter()
 
@@ -109,7 +113,9 @@ def plot_confusion_matrix(model, X_test, y_test):
     disp.plot(cmap=plt.cm.Blues)
     plt.title(f'Figure {get_figure_number()}: Confusion Matrix')
     plt.tight_layout()
+    plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
     plt.show()
+    increment_figure_counter()
 
 # Overlayed Density plot of actual vs predicted values.
 def plot_density(model, X_test, y_test):
@@ -127,6 +133,7 @@ def plot_density(model, X_test, y_test):
     plt.title(f'Figure {get_figure_number()}: Density Plot of Predicted Probabilities')
     plt.legend()
     plt.tight_layout()
+    plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
     plt.show()
     increment_figure_counter()
 
@@ -149,6 +156,7 @@ def plot_precision_recall_curve(model, X_test, y_test):
     plt.legend(loc="best")
     plt.grid(True)
     plt.tight_layout()
+    plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
     plt.show()
     increment_figure_counter()
 
@@ -172,5 +180,6 @@ def plot_roc_curve(model, X_test, y_test):
     plt.legend(loc="best")
     plt.grid(True)
     plt.tight_layout()
+    plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
     plt.show()
     increment_figure_counter()
