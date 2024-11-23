@@ -29,10 +29,11 @@ def plot_feature_importances(model, feature_names, model_name):
     plt.tight_layout()
     return fig
 
-# Plot a correlation heatmap with smaller text
+# Plot a correlation heatmap
 def plot_correlation_heatmap(data):
     fig, ax = plt.subplots(figsize=SMALL_FIGSIZE)
-    sns.heatmap(
+
+    heatmap = sns.heatmap(
         data.corr(),
         annot=True,
         fmt=".2f",
@@ -40,10 +41,21 @@ def plot_correlation_heatmap(data):
         cbar=True,
         square=True,
         linewidths=0.5,
-        annot_kws={"size": 8},  # Smaller text
+        annot_kws={"size": 3},  # Font size for annotations
+        cbar_kws={"format": "%.2f"},  # Format for color bar numbers
         ax=ax,
     )
+
+    # Adjust font size for axis tick labels
+    ax.tick_params(axis="x", labelsize=5)  # X-axis tick labels
+    ax.tick_params(axis="y", labelsize=5)  # Y-axis tick labels
+
+    # Adjust font size for color bar ticks
+    heatmap.figure.axes[-1].tick_params(labelsize=5)  # Color bar tick labels
+
+    # Set title font size
     ax.set_title("Correlation Heatmap", fontsize=10)
+
     plt.tight_layout()
     return fig
 
