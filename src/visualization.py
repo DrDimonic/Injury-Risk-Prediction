@@ -44,32 +44,33 @@ def plot_bubble_chart(model, X_test, y_test):
     else:
         y_pred = model.predict(X_test)
 
-    # Choose a feature to represent bubble size (Minutes)
-    bubble_size = X_test[:, 0] if isinstance(X_test, np.ndarray) else X_test.iloc[:, 0]
+# Actual vs Predicted values Scatter plot
+def plot_scatter(model, X_test, y_test):
+   
+    if hasattr(model, "predict_proba"):
+        y_pred = model.predict_proba(X_test)[:, 1]  # Use probabilities for positive class
+    else:
+        y_pred = model.predict(X_test)
 
     plt.figure(figsize=(10, 6))
-    plt.scatter(y_test, y_pred, s=bubble_size, alpha=0.5, c='purple', edgecolors='k')
+    plt.scatter(y_test, y_pred, alpha=0.7, c='blue', edgecolors='k')
     plt.xlabel('Actual Values')
-    plt.ylabel('Predicted Probabilities')
-    plt.title('Bubble Chart: Predicted vs Actual')
+    plt.ylabel('Predicted Values')
+    plt.title('Scatter Plot: Predicted vs Actual')
     plt.grid(True)
     plt.tight_layout()
     plt.show()
 
 
-    plt.title("Correlation Heatmap")
-    plt.tight_layout()
-    plt.show()
-
-def plot_3d_predictions(model, X_test, y_test):
+def plot_3d_predictions(model, X_test, y_test, feature_names):
     # Ensure enough features for a 3D plot
-    if X_test.shape[1] < 2:
+    if len(feature_names) < 2:
         print("3D plot requires at least two features.")
         return
 
     # Predict probabilities
     if hasattr(model, "predict_proba"):
-        y_pred = model.predict_proba(X_test)[:, 1]  # Use probabilities for the positive class
+        y_pred = model.predict_proba(X_test)[:, 1] 
     else:
         y_pred = model.predict(X_test)
 
@@ -81,8 +82,8 @@ def plot_3d_predictions(model, X_test, y_test):
     fig = plt.figure(figsize=(10, 6))
     ax = fig.add_subplot(111, projection='3d')
     scatter = ax.scatter(feature_1, feature_2, y_pred, c=y_test, cmap='coolwarm', alpha=0.8, s=50, edgecolor='k')
-    ax.set_xlabel('Feature 1')
-    ax.set_ylabel('Feature 2')
+    ax.set_xlabel(feature_names[0])
+    ax.set_ylabel(feature_names[1])
     ax.set_zlabel('Predicted Probabilities')
     plt.colorbar(scatter, label='Actual Class')
     plt.title('3D Scatter Plot: Predictions')
