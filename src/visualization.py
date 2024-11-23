@@ -23,7 +23,7 @@ def plot_feature_importances(model, feature_names):
     importances = model.feature_importances_
     indices = np.argsort(importances)[::-1]
     sorted_feature_names = [feature_names[i] for i in indices]
-
+    
     plt.figure(figsize=(10, 6))
     plt.barh(sorted_feature_names, importances[indices])
     plt.xlabel('Importance')
@@ -31,6 +31,7 @@ def plot_feature_importances(model, feature_names):
     plt.title(f'Figure {get_figure_number()}: Feature Importances')
     plt.tight_layout()
     plt.show()
+    increment_figure_counter()
 
 # Plot a correlation heatmap
 def plot_correlation_heatmap(data):
@@ -50,6 +51,7 @@ def plot_correlation_heatmap(data):
     plt.title(f'Figure {get_figure_number()}: Correlation Heatmap')
     plt.tight_layout()
     plt.show()  
+    increment_figure_counter()
 
 # Actual vs Predicted values Scatter plot
 def plot_scatter(model, X_test, y_test):
@@ -67,7 +69,7 @@ def plot_scatter(model, X_test, y_test):
     plt.grid(True)
     plt.tight_layout()
     plt.show()
-
+    increment_figure_counter()
 
 def plot_3d_predictions(model, X_test, y_test, feature_names):
     global figure_counter
@@ -97,6 +99,7 @@ def plot_3d_predictions(model, X_test, y_test, feature_names):
     plt.title(f'Figure {get_figure_number()}: 3D Scatter Plot: Predictions')
     plt.tight_layout()
     plt.show()  
+    increment_figure_counter()
 
 # Plot the confusion matrix.
 def plot_confusion_matrix(model, X_test, y_test):
@@ -125,6 +128,7 @@ def plot_density(model, X_test, y_test):
     plt.legend()
     plt.tight_layout()
     plt.show()
+    increment_figure_counter()
 
 # Plot precision-recall curve
 def plot_precision_recall_curve(model, X_test, y_test):
@@ -146,6 +150,7 @@ def plot_precision_recall_curve(model, X_test, y_test):
     plt.grid(True)
     plt.tight_layout()
     plt.show()
+    increment_figure_counter()
 
 # Plot ROC curve
 def plot_roc_curve(model, X_test, y_test):
@@ -168,3 +173,4 @@ def plot_roc_curve(model, X_test, y_test):
     plt.grid(True)
     plt.tight_layout()
     plt.show()
+    increment_figure_counter()
