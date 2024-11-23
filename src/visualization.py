@@ -8,6 +8,7 @@ from sklearn.metrics import (
     average_precision_score,
     roc_curve,
     roc_auc_score,
+    classification_report
 )
 from mpl_toolkits.mplot3d import Axes3D
 import plotly.graph_objects as go
@@ -174,7 +175,7 @@ def plot_roc_curve(model, X_test, y_test, model_name):
     plt.tight_layout()
     return fig
 
-def plot_classification_report(model, X_test, y_test, scaler=None):
+def plot_classification_report(model, X_test, y_test, model_name, scaler=None):
     # Apply scaling if required
     if scaler:
         X_test = scaler.transform(X_test)

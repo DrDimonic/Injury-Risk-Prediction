@@ -76,11 +76,11 @@ data, X_train, X_test, y_train, y_test = load_and_prepare_data()
 if visualization == "Classification Report":
     if model_choice == "Random Forest":
         st.subheader("Classification Report (Random Forest)")
-        fig = plot_classification_report(model, X_test, y_test, scaler)
+        fig = plot_classification_report(rf_model, X_test, y_test, scaler)
         st.pyplot(fig)
     else:
         st.subheader("Classification Report (Logistic Regression)")
-        fig = plot_classification_report(model, X_test, y_test, scaler)
+        fig = plot_classification_report(logreg_model, X_test, y_test, scaler)
         st.pyplot(fig)
 
 if visualization == "Classification Report":
