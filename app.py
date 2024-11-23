@@ -19,7 +19,7 @@ import matplotlib.pyplot as plt
 import io
 import os
 
-# Add an "Exit" button in the sidebar
+# Exit function
 def quit_app():
     st.warning("The application has been stopped.")
     sys.exit()
@@ -27,6 +27,11 @@ def quit_app():
 st.set_page_config(page_title="Injury Risk Prediction Dashboard", layout="wide")
 
 st.sidebar.header("Injury Risk Prediction")
+
+# Add an empty space to align the "Exit" button at the bottom
+for _ in range(10):
+    st.sidebar.write("")
+
 if st.sidebar.button("Exit"):
     quit_app()
 
