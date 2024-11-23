@@ -8,10 +8,7 @@ def load_data(filepath):
 
 # Process data for training
 def preprocess_data(data):
-      # Remove "Unnamed: 0" if it exists
-    if "Unnamed: 0" in data.columns:
-        data = data.drop(columns=["Unnamed: 0"])
-
+    # Seperate features and target
     features = data.drop(columns=['currently_injured']) 
     target = data['currently_injured']
 
