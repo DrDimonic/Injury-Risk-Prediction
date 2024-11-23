@@ -22,7 +22,7 @@ def main():
     
     # Preprocess the dataset with Standard Scaling
     print("Preprocessing dataset with Standard Scaling...")
-    features, target = preprocess_data(data)
+    features, target, scaler = preprocess_data(data)
 
     # Balance the dataset
     print("Balancing the dataset using SMOTE...")
