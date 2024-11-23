@@ -60,17 +60,14 @@ def plot_confusion_matrix(model, X_test, y_test):
     plt.tight_layout()
     plt.show()
 
-# Plot histogram of actual vs predicted values.
-def plot_actual_vs_predicted_histogram(model, X_test, y_test):
-    predictions = model.predict(X_test)
-    
-    plt.figure(figsize=(10, 6))
-    plt.hist(y_test, bins=20, alpha=0.5, label='Actual')
-    plt.hist(predictions, bins=20, alpha=0.5, label='Predicted')
-    plt.xlabel('Value')
-    plt.ylabel('Frequency')
-    plt.title('Histogram of Actual vs Predicted')
+# Overlayed Density plot of actual vs predicted values.
+def plot_density(y_test, y_pred_proba):
+    plt.figure(figsize=(8, 5))
+    sns.kdeplot(y_pred_proba[y_test == 0], label='Class 0', fill=True, alpha=0.5)
+    sns.kdeplot(y_pred_proba[y_test == 1], label='Class 1', fill=True, alpha=0.5)
+    plt.xlabel('Predicted Probability')
+    plt.ylabel('Density')
+    plt.title('Density Plot of Predicted Probabilities')
     plt.legend()
-    plt.tight_layout()
     plt.show()
 

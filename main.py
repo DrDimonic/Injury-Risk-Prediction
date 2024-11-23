@@ -2,7 +2,7 @@ from src.data_processing import load_data, preprocess_data
 from src.model_training import train_random_forest, train_logistic_regression, compare_models
 from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTE
-from src.visualization import plot_feature_importances, plot_predictions, plot_confusion_matrix, plot_actual_vs_predicted_histogram, plot_correlation_heatmap
+from src.visualization import plot_feature_importances, plot_predictions, plot_confusion_matrix, plot_density, plot_correlation_heatmap
 from sklearn.linear_model import LogisticRegression
 import joblib
 import os
@@ -54,7 +54,7 @@ def main():
     plot_correlation_heatmap(data)
     plot_predictions(rf_model, X_test, y_test)
     plot_confusion_matrix(rf_model, X_test, y_test)
-    plot_actual_vs_predicted_histogram(rf_model, X_test, y_test)
+    plot_density(rf_model, X_test, y_test)
 
     # Visualizations for Logistic Regression
     print("Generating visualizations for Logistic Regression...")
@@ -63,7 +63,7 @@ def main():
     plot_correlation_heatmap(data)
     plot_predictions(logreg, X_test, y_test)
     plot_confusion_matrix(logreg, X_test, y_test)
-    plot_actual_vs_predicted_histogram(logreg, X_test, y_test)
+    plot_density(logreg, X_test, y_test)
 
 if __name__ == "__main__":
     main()
