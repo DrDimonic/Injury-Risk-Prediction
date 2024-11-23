@@ -4,7 +4,8 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from mpl_toolkits.mplot3d import Axes3D
-
+from sklearn.metrics import precision_recall_curve, average_precision_score
+from sklearn.metrics import roc_curve, roc_auc_score
 
 
 # Plot the feature importances of the model.
@@ -111,3 +112,43 @@ def plot_density(model, X_test, y_test):
     plt.tight_layout()
     plt.show()
 
+# Plot precision-recall curve
+def plot_precision_recall_curve(model, X_test, y_test, title):
+    if hasattr(model, "predict_proba"):
+        y_scores = model.predict_proba(X_test)[:, 1]
+    else:
+        y_scores = model.decision_function(X_test)
+    
+    precision, recall, thresholds = precision_recall_curve(y_test, y_scores)
+    avg_precision = average_precision_score(y_test, y_scores)
+    
+    plt.figure(figsize=(8, 6))
+    plt.plot(recall, precision, label=f'Avg Precision = {avg_precision:.2f}', lw=2)
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.title(title)
+    plt.legend(loc="best")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+# Plot ROC curve
+def plot_roc_curve(model, X_test, y_test, title):
+    if hasattr(model, "predict_proba"):
+        y_scores = model.predict_proba(X_test)[:, 1]
+    else:
+        y_scores = model.decision_function(X_test)
+    
+    fpr, tpr, thresholds = roc_curve(y_test, y_scores)
+    auc = roc_auc_score(y_test, y_scores)
+    
+    plt.figure(figsize=(8, 6))
+    plt.plot(fpr, tpr, label=f'AUC = {auc:.2f}', lw=2)
+    plt.plot([0, 1], [0, 1], 'k--', lw=1)  # Diagonal line for reference
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title(title)
+    plt.legend(loc="best")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()

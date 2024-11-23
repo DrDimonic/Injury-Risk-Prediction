@@ -2,7 +2,7 @@ from src.data_processing import load_data, preprocess_data
 from src.model_training import train_random_forest, train_logistic_regression, compare_models, evaluate_model
 from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTE
-from src.visualization import plot_feature_importances, plot_scatter, plot_3d_predictions, plot_confusion_matrix, plot_density, plot_correlation_heatmap
+from src.visualization import plot_feature_importances, plot_scatter, plot_3d_predictions, plot_confusion_matrix, plot_density, plot_correlation_heatmap, plot_precision_recall_curve, plot_roc_curve
 import joblib
 import os
 
@@ -67,12 +67,16 @@ def main():
     plot_scatter(rf_model, X_test, y_test) 
     plot_confusion_matrix(rf_model, X_test, y_test)
     plot_density(rf_model, X_test, y_test)
+    plot_precision_recall_curve(rf_model, X_test, y_test, "Precision-Recall Curve for Random Forest")
+    plot_roc_curve(rf_model, X_test, y_test, "ROC Curve for Random Forest")
     
     # Visualizations for Logistic Regression
     print("Generating visualizations for Logistic Regression...")
     plot_3d_predictions(logreg_model, X_test, y_test, feature_names)
     plot_confusion_matrix(logreg_model, X_test, y_test)
     plot_density(logreg_model, X_test, y_test)
+    plot_precision_recall_curve(logreg_model, X_test, y_test, "Precision-Recall Curve for Logistic Regression")
+    plot_roc_curve(logreg_model, X_test, y_test, "ROC Curve for Logistic Regression")
 
 if __name__ == "__main__":
     main()
