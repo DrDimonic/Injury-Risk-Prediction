@@ -103,3 +103,44 @@ def plot_density(model, X_test, y_test, model_name):
     ax.legend()
     plt.tight_layout()
     return fig
+
+# Plot precision-recall curve
+def plot_precision_recall_curve(model, X_test, y_test, model_name):
+    if hasattr(model, "predict_proba"):
+        y_scores = model.predict_proba(X_test)[:, 1]
+    else:
+        y_scores = model.decision_function(X_test)
+    
+    precision, recall, thresholds = precision_recall_curve(y_test, y_scores)
+    avg_precision = average_precision_score(y_test, y_scores)
+    
+    fig, ax = plt.subplots(figsize=(8, 6))
+    ax.plot(recall, precision, label=f'Avg Precision = {avg_precision:.2f}', lw=2)
+    ax.set_xlabel('Recall')
+    ax.set_ylabel('Precision')
+    ax.set_title(f'Precision-Recall Curve \n({model_name})')
+    ax.legend(loc="best")
+    ax.grid(True)
+    plt.tight_layout()
+    return fig
+
+# Plot ROC curve
+def plot_roc_curve(model, X_test, y_test, model_name):
+    if hasattr(model, "predict_proba"):
+        y_scores = model.predict_proba(X_test)[:, 1]
+    else:
+        y_scores = model.decision_function(X_test)
+    
+    fpr, tpr, thresholds = roc_curve(y_test, y_scores)
+    auc = roc_auc_score(y_test, y_scores)
+    
+    fig, ax = plt.subplots(figsize=(8, 6))
+    ax.plot(fpr, tpr, label=f'AUC = {auc:.2f}', lw=2)
+    ax.plot([0, 1], [0, 1], 'k--', lw=1)  # Diagonal line for reference
+    ax.set_xlabel('False Positive Rate')
+    ax.set_ylabel('True Positive Rate')
+    ax.set_title(f'ROC Curve \n({model_name})')
+    ax.legend(loc="best")
+    ax.grid(True)
+    plt.tight_layout()
+    return fig
