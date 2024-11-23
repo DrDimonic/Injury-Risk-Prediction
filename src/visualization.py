@@ -11,6 +11,7 @@ from sklearn.metrics import (
 )
 from mpl_toolkits.mplot3d import Axes3D
 import plotly.graph_objects as go
+from sklearn.metrics import classification_report
 
 # Adjust global figure size for smaller visuals
 SMALL_FIGSIZE = (6, 4)
@@ -170,5 +171,23 @@ def plot_roc_curve(model, X_test, y_test, model_name):
     ax.set_ylabel("True Positive Rate")
     ax.set_title(f"ROC Curve ({model_name})", fontsize=10)
     ax.legend(loc="best")
+    plt.tight_layout()
+    return fig
+
+def plot_classification_report(model, X_test, y_test, model_name, scaler=None):
+    # Apply scaling if required
+    if scaler:
+        X_test = scaler.transform(X_test)
+
+    # Generate predictions and classification report
+    predictions = model.predict(X_test)
+    report = classification_report(y_test, predictions, target_names=["Class 0", "Class 1"])
+
+    # Create a figure to display the report
+    fig, ax = plt.subplots(figsize=(8, 6))
+    ax.axis("off")  # Hide the axes
+    ax.text(0, 1, f"Classification Report\n({model_name})", fontsize=10, weight="bold", ha="left")
+    ax.text(0, 0.95, report, fontsize=8, ha="left", family="monospace", transform=ax.transAxes)
+
     plt.tight_layout()
     return fig

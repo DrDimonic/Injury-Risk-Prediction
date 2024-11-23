@@ -7,6 +7,7 @@ from src.visualization import (
     plot_precision_recall_curve,
     plot_roc_curve,
     plot_3d_predictions,
+    plot_classification_report
 )
 from src.model_training import evaluate_model
 from src.data_processing import load_data, preprocess_data
@@ -115,6 +116,12 @@ elif visualization == "ROC Curve":
     else:
         fig = plot_roc_curve(logreg_model, X_test, y_test, "Logistic Regression")
     st.pyplot(fig)
+
+elif visualization == "Classification Report":
+    if visualization == "Classification Report":
+        st.subheader(f"Classification Report ({model_name})")
+        fig = plot_classification_report(model, X_test, y_test, model_name, scaler)
+        st.pyplot(fig)
 
 elif visualization == "3D Predictions Scatterplot (Logistic Regression Only)":
     if model_choice == "Logistic Regression":
