@@ -2,7 +2,7 @@ from src.data_processing import load_data, preprocess_data
 from src.model_training import train_random_forest, train_logistic_regression, compare_models
 from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTE
-from src.visualization import plot_feature_importances, plot_predictions, plot_confusion_matrix, plot_density, plot_correlation_heatmap
+from src.visualization import plot_feature_importances, plot_bubble_chart, plot_3d_predictions, plot_confusion_matrix, plot_density, plot_correlation_heatmap
 from sklearn.linear_model import LogisticRegression
 import joblib
 import os
@@ -56,7 +56,7 @@ def main():
     print("Generating visualizations for Random Forest...")
     feature_names = data.columns[:-1] 
     plot_feature_importances(rf_model, feature_names)
-    plot_predictions(rf_model, X_test, y_test)
+    plot_bubble_chart(rf_model, X_test, y_test)   
     plot_confusion_matrix(rf_model, X_test, y_test)
     plot_density(rf_model, X_test, y_test)
 
@@ -64,8 +64,7 @@ def main():
     print("Generating visualizations for Logistic Regression...")
     logreg = LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42)
     logreg.fit(X_train, y_train)
-    plot_feature_importances(logreg, feature_names)
-    plot_predictions(logreg, X_test, y_test)
+    plot_3d_predictions(logreg_model, X_test, y_test)
     plot_confusion_matrix(logreg, X_test, y_test)
     plot_density(logreg, X_test, y_test)
 

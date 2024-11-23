@@ -3,6 +3,8 @@ import seaborn as sns
 import numpy as np
 import pandas as pd
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from mpl_toolkits.mplot3d import Axes3D
+
 
 
 # Plot the feature importances of the model.
@@ -19,18 +21,13 @@ def plot_feature_importances(model, feature_names):
     plt.tight_layout()
     plt.show()
 
-# Plot actual vs predicted values.
-def plot_predictions(model, X_test, y_test):
-    predictions = model.predict(X_test)
-    
-    plt.figure(figsize=(10, 6))
-    plt.scatter(y_test, predictions, alpha=0.5)
-    plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--')
-    plt.xlabel('Actual')
-    plt.ylabel('Predicted')
-    plt.title('Actual vs Predicted Values')
-    plt.tight_layout()
-    plt.show()
+# Bubble chart for actual vs predicted values.
+def plot_bubble_chart(model, X_test, y_test):
+    # Predict probabilities or labels
+    if hasattr(model, "predict_proba"):
+        y_pred = model.predict_proba(X_test)[:, 1]  # Use probabilities for the positive class
+    else:
+        y_pred = model.predict(X_test)
 
 # Plot a correlation heatmap
 def plot_correlation_heatmap(data):
@@ -47,9 +44,50 @@ def plot_correlation_heatmap(data):
         linecolor='black'
     )
 
+    # Choose a feature to represent bubble size (Minutes)
+    bubble_size = X_test[:, 0] if isinstance(X_test, np.ndarray) else X_test.iloc[:, 0]
+
+    plt.figure(figsize=(10, 6))
+    plt.scatter(y_test, y_pred, s=bubble_size, alpha=0.5, c='purple', edgecolors='k')
+    plt.xlabel('Actual Values')
+    plt.ylabel('Predicted Probabilities')
+    plt.title('Bubble Chart: Predicted vs Actual')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+
     plt.title("Correlation Heatmap")
     plt.tight_layout()
     plt.show()
+
+def plot_3d_predictions(model, X_test, y_test):
+    # Ensure enough features for a 3D plot
+    if X_test.shape[1] < 2:
+        print("3D plot requires at least two features.")
+        return
+
+    # Predict probabilities
+    if hasattr(model, "predict_proba"):
+        y_pred = model.predict_proba(X_test)[:, 1]  # Use probabilities for the positive class
+    else:
+        y_pred = model.predict(X_test)
+
+    # Extract first two features
+    feature_1 = X_test[:, 0] if isinstance(X_test, np.ndarray) else X_test.iloc[:, 0]
+    feature_2 = X_test[:, 1] if isinstance(X_test, np.ndarray) else X_test.iloc[:, 1]
+
+    # Create a 3D scatter plot
+    fig = plt.figure(figsize=(10, 6))
+    ax = fig.add_subplot(111, projection='3d')
+    scatter = ax.scatter(feature_1, feature_2, y_pred, c=y_test, cmap='coolwarm', alpha=0.8, s=50, edgecolor='k')
+    ax.set_xlabel('Feature 1')
+    ax.set_ylabel('Feature 2')
+    ax.set_zlabel('Predicted Probabilities')
+    plt.colorbar(scatter, label='Actual Class')
+    plt.title('3D Scatter Plot: Predictions')
+    plt.tight_layout()
+    plt.show()  
 
 # Plot the confusion matrix.
 def plot_confusion_matrix(model, X_test, y_test):
