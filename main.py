@@ -14,14 +14,16 @@ def main():
     logreg_model_save_path = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\models\trained_logreg_model.pkl"
     scaler_save_path = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\models\scaler.pkl"
 
-    # Load and preprocess the dataset
+    # Load the dataset
     print("Loading dataset...")
     data = load_data(dataset_path)
     if data is None:
         print("Dataset could not be loaded.")
         return
     
-    features, target, scaler = preprocess_data(data)
+    # Preprocess the dataset with L1 normalization
+    print("Preprocessing dataset with L1 normalization...")
+    features, target = preprocess_data(data)
 
     # Balance the dataset
     print("Balancing the dataset using SMOTE...")

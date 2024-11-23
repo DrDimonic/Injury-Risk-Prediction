@@ -1,6 +1,5 @@
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
-
+from sklearn.preprocessing import normalize
 
 def load_data(filepath):
     # Load data from a CSV file.
@@ -12,8 +11,7 @@ def preprocess_data(data):
     features = data.drop(columns=['currently_injured']) 
     target = data['currently_injured']
 
-    # Normalize features
-    scaler = StandardScaler()
-    normalized_features = scaler.fit_transform(features)
+    # Normalize features (L1)
+    normalized_features = normalize(features, norm='l1', axis=0)
 
-    return normalized_features, target, scaler
+    return normalized_features, target
