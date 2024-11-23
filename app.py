@@ -20,13 +20,10 @@ import io
 import os
 
 # Exit function
+# Exit function
 def quit_app():
-    st.warning("The application has been stopped.")
-    sys.exit()
-
-st.set_page_config(page_title="Injury Risk Prediction Dashboard", layout="wide")
-
-st.sidebar.header("Injury Risk Prediction")
+    st.warning("Shutting down the application...")
+    os.kill(os.getpid(), signal.SIGTERM)
 
 # Add an empty space to align the "Exit" button at the bottom
 for _ in range(10):
@@ -132,7 +129,7 @@ if st.sidebar.button("Generate Visualizations"):
         st.pyplot(fig)
 
 # Display evaluation metrics
-if st.sidebar.button("Display Scores"):
+if st.sidebar.button("Display Classification Report"):
     st.write(f"### {model_choice} Evaluation Metrics")
     output = io.StringIO()
     if model_choice == "Random Forest":
