@@ -6,7 +6,6 @@ from src.visualization import (
     plot_density,
     plot_precision_recall_curve,
     plot_roc_curve,
-    plot_scatter,
     plot_3d_predictions,
 )
 from src.model_training import evaluate_model
@@ -115,13 +114,6 @@ elif visualization == "ROC Curve":
         fig = plot_roc_curve(rf_model, X_test, y_test, "Random Forest")
     else:
         fig = plot_roc_curve(logreg_model, X_test, y_test, "Logistic Regression")
-    st.pyplot(fig)
-
-elif visualization == "Scatterplot":
-    if model_choice == "Random Forest":
-        fig = plot_scatter(rf_model, X_test, y_test, "Random Forest")
-    else:
-        fig = plot_scatter(logreg_model, X_test, y_test, "Logistic Regression")
     st.pyplot(fig)
 
 elif visualization == "3D Predictions Scatterplot (Logistic Regression Only)":
