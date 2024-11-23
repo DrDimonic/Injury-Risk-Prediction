@@ -9,9 +9,9 @@ import os
 def main():
     # Define paths
     dataset_path = "data/Injury_risk_prediction_dataset.csv"
-    rf_model_save_path = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\models\trained_rf_model.pkl"
-    logreg_model_save_path = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\models\trained_logreg_model.pkl"
-    scaler_save_path = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\models\scaler.pkl"
+    rf_model_save_path = "models/trained_rf_model.pkl"
+    logreg_model_save_path = "models/trained_logreg_model.pkl"
+    scaler_save_path = "models/scaler.pkl"
 
     # Load the dataset
     print("Loading dataset...")

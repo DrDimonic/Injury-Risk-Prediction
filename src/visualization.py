@@ -112,7 +112,7 @@ def plot_confusion_matrix(model, X_test, y_test, model_name):
 # Plot density plot of predicted probabilities
 def plot_density(model, X_test, y_test, model_name):
     y_pred_proba = model.predict_proba(X_test)[:, 1]
-    fig, ax = plt.subplots(figsize=(9, 5))
+    fig, ax = plt.subplots(figsize=(10, 5))
     sns.kdeplot(
         y_pred_proba[y_test == 0],
         label="Class 0 (Not Injured)",
