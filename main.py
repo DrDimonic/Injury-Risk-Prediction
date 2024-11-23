@@ -3,7 +3,6 @@ from src.model_training import train_random_forest, train_logistic_regression, c
 from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTE
 from src.visualization import plot_feature_importances, plot_scatter, plot_3d_predictions, plot_confusion_matrix, plot_density, plot_correlation_heatmap
-from sklearn.linear_model import LogisticRegression
 import joblib
 import os
 
@@ -21,9 +20,9 @@ def main():
         print("Dataset could not be loaded.")
         return
     
-    # Preprocess the dataset with L1 normalization
-    print("Preprocessing dataset with L1 normalization...")
-    features, target, scaler = preprocess_data(data)
+    # Preprocess the dataset with Standard Scaling
+    print("Preprocessing dataset with Standard Scaling...")
+    features, target = preprocess_data(data)
 
     # Balance the dataset
     print("Balancing the dataset using SMOTE...")
@@ -56,7 +55,7 @@ def main():
     joblib.dump(scaler, scaler_save_path)
     print(f"Logistic Regression model saved to {logreg_model_save_path}")
     print(f"Scaler saved to {scaler_save_path}")
-    
+
     # Correlation Heatmap
     print("Generating Correlation Heatmap...")
     plot_correlation_heatmap(data) 
@@ -69,14 +68,11 @@ def main():
     plot_confusion_matrix(rf_model, X_test, y_test)
     plot_density(rf_model, X_test, y_test)
     
-
     # Visualizations for Logistic Regression
     print("Generating visualizations for Logistic Regression...")
-    logreg = LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42)
-    logreg.fit(X_train, y_train)
     plot_3d_predictions(logreg_model, X_test, y_test, feature_names)
-    plot_confusion_matrix(logreg, X_test, y_test)
-    plot_density(logreg, X_test, y_test)
+    plot_confusion_matrix(logreg_model, X_test, y_test)
+    plot_density(logreg_model, X_test, y_test)
 
 if __name__ == "__main__":
     main()

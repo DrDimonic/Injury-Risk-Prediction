@@ -23,7 +23,11 @@ def train_logistic_regression(X_train, y_train):
     return logreg, scaler
 
 # Evaluate the model using test data.
-def evaluate_model(model, X_test, y_test, scaler = None):
+def evaluate_model(model, X_test, y_test, scaler=None):
+    # Apply scaling if scaler is provided
+    if scaler:
+        X_test = scaler.transform(X_test)
+    
     predictions = model.predict(X_test)
     
     print("Classification Report:")
@@ -35,11 +39,10 @@ def evaluate_model(model, X_test, y_test, scaler = None):
 
 # Compare Logistic Regression and Random Forest models.
 def compare_models(X_train, y_train, X_test, y_test):
-
     # Train Logistic Regression
-    logreg = train_logistic_regression(X_train, y_train)
+    logreg, scaler = train_logistic_regression(X_train, y_train)
     print("\nLogistic Regression Evaluation:")
-    evaluate_model(logreg, X_test, y_test)
+    evaluate_model(logreg, X_test, y_test, scaler)
 
     # Train Random Forest
     rf_model = train_random_forest(X_train, y_train)
