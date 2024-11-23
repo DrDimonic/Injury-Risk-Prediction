@@ -7,7 +7,7 @@ from src.visualization import (
     plot_precision_recall_curve,
     plot_roc_curve,
     plot_scatter,
-    plot_3d_predictions
+    plot_3d_predictions,
 )
 from src.model_training import evaluate_model
 from src.data_processing import load_data, preprocess_data
@@ -36,78 +36,98 @@ def load_and_prepare_data():
     X_train, X_test, y_train, y_test = train_test_split(X_balanced, y_balanced, test_size=0.3, random_state=42)
     return data, X_train, X_test, y_train, y_test
 
-# Streamlit App
 st.set_page_config(page_title="Injury Risk Prediction", layout="wide")
 
-# Sidebar Options
+# Sidebar
 st.sidebar.title("Options")
+
+# Correlation Heatmap button
+if st.sidebar.button("Show Correlation Heatmap"):
+    st.subheader("Correlation Heatmap")
+    data, _, _, _, _ = load_and_prepare_data()
+    fig = plot_correlation_heatmap(data)
+    st.pyplot(fig)
+
+# Model and visualization selection
+model_choice = st.sidebar.selectbox("Select a model:", ["Random Forest", "Logistic Regression"])
 visualization = st.sidebar.selectbox(
-    "Select a visualization or report:",
+    "Select a visualization:",
     [
-        "Classification Report (Logistic Regression)",
-        "Classification Report (Random Forest)",
+        "Classification Report",
         "Confusion Matrix",
-        "Correlation Heatmap",
         "Density Plot",
         "Feature Importance (Random Forest Only)",
         "Precision-Recall Curve",
         "ROC Curve",
-        "3D Predictions Scatterplot (Logistic Regression Only)"
-    ]
+        "Scatterplot",
+        "3D Predictions Scatterplot (Logistic Regression Only)",
+    ],
 )
 
-# Exit button at the bottom of the sidebar
+# Exit button
 if st.sidebar.button("Exit"):
     st.stop()
 
-# Load models and data
+# Load data and models
 rf_model, logreg_model, scaler = load_models()
 data, X_train, X_test, y_train, y_test = load_and_prepare_data()
 
-# Display selected visualization
-if visualization == "Correlation Heatmap":
-    st.subheader("Correlation Heatmap")
-    fig = plot_correlation_heatmap(data)
+# Display visualizations
+if visualization == "Classification Report":
+    if model_choice == "Random Forest":
+        st.subheader("Classification Report (Random Forest)")
+        st.text(evaluate_model(rf_model, X_test, y_test))  # Display as plain text
+    else:
+        st.subheader("Classification Report (Logistic Regression)")
+        st.text(evaluate_model(logreg_model, X_test, y_test, scaler))
+
+elif visualization == "Confusion Matrix":
+    if model_choice == "Random Forest":
+        fig = plot_confusion_matrix(rf_model, X_test, y_test, "Random Forest")
+    else:
+        fig = plot_confusion_matrix(logreg_model, X_test, y_test, "Logistic Regression")
+    st.pyplot(fig)
+
+elif visualization == "Density Plot":
+    if model_choice == "Random Forest":
+        fig = plot_density(rf_model, X_test, y_test, "Random Forest")
+    else:
+        fig = plot_density(logreg_model, X_test, y_test, "Logistic Regression")
     st.pyplot(fig)
 
 elif visualization == "Feature Importance (Random Forest Only)":
-    st.subheader("Feature Importance (Random Forest Only)")
-    feature_names = data.columns[:-1]
-    fig = plot_feature_importances(rf_model, feature_names, "Random Forest")
+    if model_choice == "Random Forest":
+        feature_names = data.columns[:-1]
+        fig = plot_feature_importances(rf_model, feature_names, "Random Forest")
+        st.pyplot(fig)
+    else:
+        st.error("Feature importance is only available for Random Forest.")
+
+elif visualization == "Precision-Recall Curve":
+    if model_choice == "Random Forest":
+        fig = plot_precision_recall_curve(rf_model, X_test, y_test, "Random Forest")
+    else:
+        fig = plot_precision_recall_curve(logreg_model, X_test, y_test, "Logistic Regression")
+    st.pyplot(fig)
+
+elif visualization == "ROC Curve":
+    if model_choice == "Random Forest":
+        fig = plot_roc_curve(rf_model, X_test, y_test, "Random Forest")
+    else:
+        fig = plot_roc_curve(logreg_model, X_test, y_test, "Logistic Regression")
+    st.pyplot(fig)
+
+elif visualization == "Scatterplot":
+    if model_choice == "Random Forest":
+        fig = plot_scatter(rf_model, X_test, y_test, "Random Forest")
+    else:
+        fig = plot_scatter(logreg_model, X_test, y_test, "Logistic Regression")
     st.pyplot(fig)
 
 elif visualization == "3D Predictions Scatterplot (Logistic Regression Only)":
-    st.subheader("3D Predictions Scatterplot (Logistic Regression Only)")
-    feature_names = data.columns[:-1]
-    fig = plot_3d_predictions(logreg_model, X_test, y_test, feature_names, "Logistic Regression")
-    st.pyplot(fig)
-
-elif visualization == "Confusion Matrix":
-    st.subheader("Confusion Matrix")
-    fig_rf = plot_confusion_matrix(rf_model, X_test, y_test, "Random Forest")
-    st.pyplot(fig_rf)
-
-elif visualization == "Density Plot":
-    st.subheader("Density Plot")
-    fig_rf = plot_density(rf_model, X_test, y_test, "Random Forest")
-    st.pyplot(fig_rf)
-
-elif visualization == "Precision-Recall Curve":
-    st.subheader("Precision-Recall Curve")
-    fig_rf = plot_precision_recall_curve(rf_model, X_test, y_test, "Random Forest")
-    st.pyplot(fig_rf)
-
-elif visualization == "ROC Curve":
-    st.subheader("ROC Curve")
-    fig_rf = plot_roc_curve(rf_model, X_test, y_test, "Random Forest")
-    st.pyplot(fig_rf)
-
-elif visualization == "Classification Report (Random Forest)":
-    st.subheader("Classification Report (Random Forest)")
-    with st.expander("Random Forest Classification Report"):
-        st.text(evaluate_model(rf_model, X_test, y_test))
-
-elif visualization == "Classification Report (Logistic Regression)":
-    st.subheader("Classification Report (Logistic Regression)")
-    with st.expander("Logistic Regression Classification Report"):
-        st.text(evaluate_model(logreg_model, X_test, y_test, scaler))
+    if model_choice == "Logistic Regression":
+        feature_names = data.columns[:-1]
+        fig = plot_3d_predictions(logreg_model, X_test, y_test, feature_names, "Logistic Regression")
+        st.plotly_chart(fig)  # Using Plotly for interactive 3D scatterplot
+    else:
+        st.error("3D Predictions Scatterplot is only available for Logistic Regression.")
