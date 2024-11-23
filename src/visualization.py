@@ -23,7 +23,7 @@ def plot_feature_importances(model, feature_names, model_name):
     indices = np.argsort(importances)[::-1]
     sorted_feature_names = [feature_names[i] for i in indices]
 
-    fig, ax = plt.subplots(figsize=SMALL_FIGSIZE)
+    fig, ax = plt.subplots(figsize=(9, 5))
     ax.barh(sorted_feature_names, importances[indices], color="skyblue")
     ax.set_xlabel("Importance")
     ax.set_ylabel("Feature")
@@ -33,7 +33,7 @@ def plot_feature_importances(model, feature_names, model_name):
 
 # Plot a correlation heatmap
 def plot_correlation_heatmap(data):
-    fig, ax = plt.subplots(figsize=SMALL_FIGSIZE)
+    fig, ax = plt.subplots(figsize=(10, 6))
 
     heatmap = sns.heatmap(
         data.corr(),
@@ -43,17 +43,17 @@ def plot_correlation_heatmap(data):
         cbar=True,
         square=True,
         linewidths=0.5,
-        annot_kws={"size": 3},  # Font size for annotations
+        annot_kws={"size": 6},  # Font size for annotations
         cbar_kws={"format": "%.2f"},  # Format for color bar numbers
         ax=ax,
     )
 
     # Adjust font size for axis tick labels
-    ax.tick_params(axis="x", labelsize=5)  # X-axis tick labels
-    ax.tick_params(axis="y", labelsize=5)  # Y-axis tick labels
+    ax.tick_params(axis="x", labelsize=6)  # X-axis tick labels
+    ax.tick_params(axis="y", labelsize=6)  # Y-axis tick labels
 
     # Adjust font size for color bar ticks
-    heatmap.figure.axes[-1].tick_params(labelsize=5)  # Color bar tick labels
+    heatmap.figure.axes[-1].tick_params(labelsize=6)  # Color bar tick labels
 
     # Set title font size
     ax.set_title("Correlation Heatmap", fontsize=10)
@@ -103,7 +103,7 @@ def plot_3d_predictions(model, X_test, y_test, feature_names, model_name):
 def plot_confusion_matrix(model, X_test, y_test, model_name):
     cm = confusion_matrix(y_test, model.predict(X_test))
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
-    fig, ax = plt.subplots(figsize=SMALL_FIGSIZE)
+    fig, ax = plt.subplots(figsize=(10, 6))
     disp.plot(cmap=plt.cm.Blues, ax=ax)
     ax.set_title(f"Confusion Matrix ({model_name})", fontsize=10)
     plt.tight_layout()
@@ -112,7 +112,7 @@ def plot_confusion_matrix(model, X_test, y_test, model_name):
 # Plot density plot of predicted probabilities
 def plot_density(model, X_test, y_test, model_name):
     y_pred_proba = model.predict_proba(X_test)[:, 1]
-    fig, ax = plt.subplots(figsize=SMALL_FIGSIZE)
+    fig, ax = plt.subplots(figsize=(9, 5))
     sns.kdeplot(
         y_pred_proba[y_test == 0],
         label="Class 0 (Not Injured)",
@@ -146,7 +146,7 @@ def plot_precision_recall_curve(model, X_test, y_test, model_name):
     precision, recall, _ = precision_recall_curve(y_test, y_scores)
     avg_precision = average_precision_score(y_test, y_scores)
 
-    fig, ax = plt.subplots(figsize=SMALL_FIGSIZE)
+    fig, ax = plt.subplots(figsize=(9, 5))
     ax.plot(recall, precision, label=f"Avg Precision = {avg_precision:.2f}", lw=2)
     ax.set_xlabel("Recall")
     ax.set_ylabel("Precision")
@@ -165,7 +165,7 @@ def plot_roc_curve(model, X_test, y_test, model_name):
     fpr, tpr, _ = roc_curve(y_test, y_scores)
     auc = roc_auc_score(y_test, y_scores)
 
-    fig, ax = plt.subplots(figsize=SMALL_FIGSIZE)
+    fig, ax = plt.subplots(figsize=(9, 5))
     ax.plot(fpr, tpr, label=f"AUC = {auc:.2f}", lw=2)
     ax.plot([0, 1], [0, 1], "k--", lw=1)  # Diagonal line for reference
     ax.set_xlabel("False Positive Rate")
@@ -185,7 +185,7 @@ def plot_classification_report(model, X_test, y_test, model_name, scaler=None):
     report = classification_report(y_test, predictions, target_names=["Class 0", "Class 1"])
 
     # Create a figure to display the report
-    fig, ax = plt.subplots(figsize=(8, 6))
+    fig, ax = plt.subplots(figsize=(9, 5))
     ax.axis("off")  # Hide the axes
 
     # Add the title above the report

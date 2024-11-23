@@ -59,7 +59,6 @@ visualization = st.sidebar.selectbox(
         "Feature Importance (Random Forest Only)",
         "Precision-Recall Curve",
         "ROC Curve",
-        "Scatterplot",
         "3D Predictions Scatterplot (Logistic Regression Only)",
     ],
 )
