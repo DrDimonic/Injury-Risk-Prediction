@@ -1,5 +1,5 @@
 from src.data_processing import load_data, preprocess_data
-from src.model_training import train_random_forest, train_logistic_regression, evaluate_model, compare_models
+from src.model_training import train_random_forest, train_logistic_regression, compare_models
 from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTE
 import joblib
