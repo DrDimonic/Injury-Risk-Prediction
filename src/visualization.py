@@ -2,44 +2,27 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import pandas as pd
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, precision_recall_curve, average_precision_score, roc_curve, roc_auc_score
 from mpl_toolkits.mplot3d import Axes3D
-from sklearn.metrics import precision_recall_curve, average_precision_score
-from sklearn.metrics import roc_curve, roc_auc_score
 
-# Global figure counter
-figure_counter = 1
-
-def increment_figure_counter():
-    global figure_counter
-    figure_counter += 1
-
-def get_figure_number():
-    return figure_counter
-
-# Plot the feature importances of the model.
+# Plot feature importances
 def plot_feature_importances(model, feature_names, model_name):
-    global figure_counter
     importances = model.feature_importances_
     indices = np.argsort(importances)[::-1]
     sorted_feature_names = [feature_names[i] for i in indices]
+    
     fig, ax = plt.subplots(figsize=(10, 6))
-
-    plt.figure(figsize=(10, 6))
-    plt.barh(sorted_feature_names, importances[indices])
-    plt.xlabel('Importance')
-    plt.ylabel('Feature')
-    plt.title(f'Feature Importances \n({model_name})')
+    ax.barh(sorted_feature_names, importances[indices])
+    ax.set_xlabel('Importance')
+    ax.set_ylabel('Feature')
+    ax.set_title(f'Feature Importances \n({model_name})')
     plt.tight_layout()
-    plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
-    increment_figure_counter()
     return fig
 
-# Plot a correlation heatmap
+# Plot correlation heatmap
 def plot_correlation_heatmap(data):
-    global figure_counter
     correlation_matrix = data.corr()
-    plt.figure(figsize=(10, 8))
+    fig, ax = plt.subplots(figsize=(10, 8))
     sns.heatmap(
         correlation_matrix,
         annot=True,
@@ -48,51 +31,42 @@ def plot_correlation_heatmap(data):
         cbar=True,
         square=True,
         linewidths=0.5,
-        linecolor='black'
+        linecolor='black',
+        ax=ax
     )
-    plt.title('Correlation Heatmap')
+    ax.set_title('Correlation Heatmap')
     plt.tight_layout()
-    plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
-    plt.show()  
-    increment_figure_counter()
+    return fig
 
 # Actual vs Predicted values Scatter plot
 def plot_scatter(model, X_test, y_test, model_name):
-    global figure_counter
     if hasattr(model, "predict_proba"):
         y_pred = model.predict_proba(X_test)[:, 1]  
     else:
         y_pred = model.predict(X_test)
 
-    plt.figure(figsize=(10, 6))
-    plt.scatter(y_test, y_pred, alpha=0.7, c='blue', edgecolors='k')
-    plt.xlabel('Actual Values')
-    plt.ylabel('Predicted Values')
-    plt.title(f'Scatter Plot: Predicted vs Actual \n({model_name})')
-    plt.grid(True)
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.scatter(y_test, y_pred, alpha=0.7, c='blue', edgecolors='k')
+    ax.set_xlabel('Actual Values')
+    ax.set_ylabel('Predicted Values')
+    ax.set_title(f'Scatter Plot: Predicted vs Actual \n({model_name})')
+    ax.grid(True)
     plt.tight_layout()
-    plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
-    plt.show()
-    increment_figure_counter()
+    return fig
 
+# 3D Scatter Plot
 def plot_3d_predictions(model, X_test, y_test, feature_names, model_name):
-    global figure_counter
-    # Ensure valid features for plotting
     if len(feature_names) < 2:
-        print("3D plot requires at least two features.")
-        return
+        raise ValueError("3D plot requires at least two features.")
 
-    # Predict probabilities
     if hasattr(model, "predict_proba"):
         y_pred = model.predict_proba(X_test)[:, 1] 
     else:
         y_pred = model.predict(X_test)
 
-    # Extract first two features
     feature_1 = X_test[:, 0] if isinstance(X_test, np.ndarray) else X_test.iloc[:, 0]
     feature_2 = X_test[:, 1] if isinstance(X_test, np.ndarray) else X_test.iloc[:, 1]
 
-    # Create a 3D scatter plot
     fig = plt.figure(figsize=(10, 6))
     ax = fig.add_subplot(111, projection='3d')
     scatter = ax.scatter(feature_1, feature_2, y_pred, c=y_test, cmap='coolwarm', alpha=0.8, s=50, edgecolor='k')
@@ -102,86 +76,30 @@ def plot_3d_predictions(model, X_test, y_test, feature_names, model_name):
     plt.colorbar(scatter, label='Actual Class')
     plt.title(f'3D Scatter Plot: Predictions \n({model_name})')
     plt.tight_layout()
-    plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
-    plt.show()  
-    increment_figure_counter()
-
-# Plot the confusion matrix.
-def plot_confusion_matrix(model, X_test, y_test, model_name):
-    global figure_counter
-    cm = confusion_matrix(y_test, model.predict(X_test))
-    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
-    fig, ax = plt.subplots(figsize=(8, 6))
-    disp.plot(cmap=plt.cm.Blues)
-    plt.title(f'Confusion Matrix \n({model_name})')
-    plt.tight_layout()
-    plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
-    increment_figure_counter()
     return fig
 
-# Overlayed Density plot of actual vs predicted values.
+# Plot confusion matrix
+def plot_confusion_matrix(model, X_test, y_test, model_name):
+    cm = confusion_matrix(y_test, model.predict(X_test))
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    disp.plot(cmap=plt.cm.Blues, ax=ax)
+    ax.set_title(f'Confusion Matrix \n({model_name})')
+    plt.tight_layout()
+    return fig
+
+# Overlayed Density plot
 def plot_density(model, X_test, y_test, model_name):
-    global figure_counter
-    # Predict and extract probabilites
     y_pred_proba = model.predict_proba(X_test)
     positive_class_proba = y_pred_proba[:, 1]
 
-    # Overlayed density plot
-    plt.figure(figsize=(8, 5))
-    sns.kdeplot(positive_class_proba[y_test == 0], label='Class 0 (Not Injured)', fill=True, alpha=0.5, color='blue')
-    sns.kdeplot(positive_class_proba[y_test == 1], label='Class 1 (Injured)', fill=True, alpha=0.5, color='orange')
-    plt.xlabel('Predicted Probability for Class 1')
-    plt.ylabel('Density')
-    plt.title(f'Density Plot of Predicted Probabilities \n({model_name})')
-    plt.legend()
+    fig, ax = plt.subplots(figsize=(8, 5))
+    sns.kdeplot(positive_class_proba[y_test == 0], label='Class 0 (Not Injured)', fill=True, alpha=0.5, color='blue', ax=ax)
+    sns.kdeplot(positive_class_proba[y_test == 1], label='Class 1 (Injured)', fill=True, alpha=0.5, color='orange', ax=ax)
+    ax.set_xlabel('Predicted Probability for Class 1')
+    ax.set_ylabel('Density')
+    ax.set_title(f'Density Plot of Predicted Probabilities \n({model_name})')
+    ax.legend()
     plt.tight_layout()
-    plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
-    plt.show()
-    increment_figure_counter()
-
-# Plot precision-recall curve
-def plot_precision_recall_curve(model, X_test, y_test, model_name):
-    global figure_counter
-    if hasattr(model, "predict_proba"):
-        y_scores = model.predict_proba(X_test)[:, 1]
-    else:
-        y_scores = model.decision_function(X_test)
-    
-    precision, recall, thresholds = precision_recall_curve(y_test, y_scores)
-    avg_precision = average_precision_score(y_test, y_scores)
-    
-    plt.figure(figsize=(8, 6))
-    plt.plot(recall, precision, label=f'Avg Precision = {avg_precision:.2f}', lw=2)
-    plt.xlabel('Recall')
-    plt.ylabel('Precision')
-    plt.title(f'Precision-Recall Curve \n({model_name})')
-    plt.legend(loc="best")
-    plt.grid(True)
-    plt.tight_layout()
-    plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
-    plt.show()
-    increment_figure_counter()
-
-# Plot ROC curve
-def plot_roc_curve(model, X_test, y_test, model_name):
-    global figure_counter
-    if hasattr(model, "predict_proba"):
-        y_scores = model.predict_proba(X_test)[:, 1]
-    else:
-        y_scores = model.decision_function(X_test)
-    
-    fpr, tpr, thresholds = roc_curve(y_test, y_scores)
-    auc = roc_auc_score(y_test, y_scores)
-    
-    plt.figure(figsize=(8, 6))
-    plt.plot(fpr, tpr, label=f'AUC = {auc:.2f}', lw=2)
-    plt.plot([0, 1], [0, 1], 'k--', lw=1)  # Diagonal line for reference
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title(f'ROC Curve \n({model_name})')
-    plt.legend(loc="best")
-    plt.grid(True)
-    plt.tight_layout()
-    plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
-    plt.show()
-    increment_figure_counter()
+    return fig
