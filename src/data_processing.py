@@ -1,17 +1,25 @@
 import pandas as pd
-from sklearn.preprocessing import normalize
+from sklearn.preprocessing import StandardScaler
 
 def load_data(filepath):
     # Load data from a CSV file.
-    return pd.read_csv(filepath)
+    try:
+        data = pd.read_csv(filepath)
+        print("Dataset loaded successfully.")
+        return data
+    except Exception as e:
+        print(f"Error loading dataset: {e}")
+        return None
 
-# Process data for training
+# Preprocess the dataset for training
 def preprocess_data(data):
-    # Seperate features and target
-    features = data.drop(columns=['currently_injured']) 
-    target = data['currently_injured']
+    # Separate features and target
+    features = data.iloc[:, :-1]  # All columns except the last
+    target = data.iloc[:, -1]    # Last column as target
 
-    # Normalize features (L1)
-    normalized_features = normalize(features, norm='l1', axis=0)
+    # Apply Standard Scaling
+    scaler = StandardScaler()
+    features_scaled = scaler.fit_transform(features)
 
-    return normalized_features, target
+    print("Preprocessing complete with Standard Scaling.")
+    return features_scaled, target, scaler

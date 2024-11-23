@@ -35,6 +35,9 @@ def plot_correlation_heatmap(data):
         linewidths=0.5,
         linecolor='black'
     )
+    plt.title('Correlation Heatmap')
+    plt.tight_layout()
+    plt.show()  
 
 # Actual vs Predicted values Scatter plot
 def plot_scatter(model, X_test, y_test):

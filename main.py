@@ -43,11 +43,19 @@ def main():
     joblib.dump(rf_model, rf_model_save_path)
     print(f"Random Forest model saved to {rf_model_save_path}")
 
+    logreg_model = train_logistic_regression(X_train, y_train)
+    joblib.dump(logreg_model, logreg_model_save_path)
+    joblib.dump(scaler, scaler_save_path)
+    print(f"Logistic Regression model saved to {logreg_model_save_path}")
+    print(f"Scaler saved to {scaler_save_path}")
     logreg_model, scaler = train_logistic_regression(X_train, y_train)
     joblib.dump(logreg_model, logreg_model_save_path)
     joblib.dump(scaler, scaler_save_path)
     print(f"Logistic Regression model saved to {logreg_model_save_path}")
     print(f"Scaler saved to {scaler_save_path}")
+
+    print("Generating Correlation Heatmap...")
+    plot_correlation_heatmap(data) 
 
     # Visualizations for Random Forest
     print("Generating visualizations for Random Forest...")
@@ -55,8 +63,8 @@ def main():
     plot_feature_importances(rf_model, feature_names)
     plot_scatter(rf_model, X_test, y_test) 
     plot_confusion_matrix(rf_model, X_test, y_test)
-    plot_correlation_heatmap(data) 
     plot_density(rf_model, X_test, y_test)
+    
 
     # Visualizations for Logistic Regression
     print("Generating visualizations for Logistic Regression...")
