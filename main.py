@@ -21,7 +21,7 @@ def main():
         print("Dataset could not be loaded.")
         return
     
-    features, target = preprocess_data(data)
+    features, target, scaler = preprocess_data(data)
 
     # Balance the dataset
     print("Balancing the dataset using SMOTE...")
