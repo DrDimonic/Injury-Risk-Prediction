@@ -12,23 +12,26 @@ from sklearn.metrics import (
 from mpl_toolkits.mplot3d import Axes3D
 import plotly.graph_objects as go
 
+# Adjust global figure size for smaller visuals
+SMALL_FIGSIZE = (6, 4)
+
 # Plot the feature importances of the model.
 def plot_feature_importances(model, feature_names, model_name):
     importances = model.feature_importances_
     indices = np.argsort(importances)[::-1]
     sorted_feature_names = [feature_names[i] for i in indices]
 
-    fig, ax = plt.subplots(figsize=(8, 6))
-    ax.barh(sorted_feature_names, importances[indices], color='skyblue')
-    ax.set_xlabel('Importance')
-    ax.set_ylabel('Feature')
-    ax.set_title(f'Feature Importances ({model_name})')
+    fig, ax = plt.subplots(figsize=SMALL_FIGSIZE)
+    ax.barh(sorted_feature_names, importances[indices], color="skyblue")
+    ax.set_xlabel("Importance")
+    ax.set_ylabel("Feature")
+    ax.set_title(f"Feature Importances ({model_name})")
     plt.tight_layout()
     return fig
 
-# Plot a correlation heatmap
+# Plot a correlation heatmap with smaller text
 def plot_correlation_heatmap(data):
-    fig, ax = plt.subplots(figsize=(8, 6))
+    fig, ax = plt.subplots(figsize=SMALL_FIGSIZE)
     sns.heatmap(
         data.corr(),
         annot=True,
@@ -37,9 +40,10 @@ def plot_correlation_heatmap(data):
         cbar=True,
         square=True,
         linewidths=0.5,
+        annot_kws={"size": 8},  # Smaller text
         ax=ax,
     )
-    ax.set_title("Correlation Heatmap")
+    ax.set_title("Correlation Heatmap", fontsize=10)
     plt.tight_layout()
     return fig
 
@@ -76,6 +80,8 @@ def plot_3d_predictions(model, X_test, y_test, feature_names, model_name):
             yaxis_title=feature_names[1],
             zaxis_title="Predicted Probabilities",
         ),
+        width=600,
+        height=400,  # Smaller dimensions
     )
     return fig
 
@@ -83,16 +89,16 @@ def plot_3d_predictions(model, X_test, y_test, feature_names, model_name):
 def plot_confusion_matrix(model, X_test, y_test, model_name):
     cm = confusion_matrix(y_test, model.predict(X_test))
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
-    fig, ax = plt.subplots(figsize=(8, 6))
+    fig, ax = plt.subplots(figsize=SMALL_FIGSIZE)
     disp.plot(cmap=plt.cm.Blues, ax=ax)
-    ax.set_title(f"Confusion Matrix ({model_name})")
+    ax.set_title(f"Confusion Matrix ({model_name})", fontsize=10)
     plt.tight_layout()
     return fig
 
 # Plot density plot of predicted probabilities
 def plot_density(model, X_test, y_test, model_name):
     y_pred_proba = model.predict_proba(X_test)[:, 1]
-    fig, ax = plt.subplots(figsize=(8, 6))
+    fig, ax = plt.subplots(figsize=SMALL_FIGSIZE)
     sns.kdeplot(
         y_pred_proba[y_test == 0],
         label="Class 0 (Not Injured)",
@@ -111,7 +117,7 @@ def plot_density(model, X_test, y_test, model_name):
     )
     ax.set_xlabel("Predicted Probability for Class 1")
     ax.set_ylabel("Density")
-    ax.set_title(f"Density Plot of Predicted Probabilities ({model_name})")
+    ax.set_title(f"Density Plot of Predicted Probabilities ({model_name})", fontsize=10)
     ax.legend()
     plt.tight_layout()
     return fig
@@ -126,11 +132,11 @@ def plot_precision_recall_curve(model, X_test, y_test, model_name):
     precision, recall, _ = precision_recall_curve(y_test, y_scores)
     avg_precision = average_precision_score(y_test, y_scores)
 
-    fig, ax = plt.subplots(figsize=(8, 6))
+    fig, ax = plt.subplots(figsize=SMALL_FIGSIZE)
     ax.plot(recall, precision, label=f"Avg Precision = {avg_precision:.2f}", lw=2)
     ax.set_xlabel("Recall")
     ax.set_ylabel("Precision")
-    ax.set_title(f"Precision-Recall Curve ({model_name})")
+    ax.set_title(f"Precision-Recall Curve ({model_name})", fontsize=10)
     ax.legend(loc="best")
     plt.tight_layout()
     return fig
@@ -145,12 +151,12 @@ def plot_roc_curve(model, X_test, y_test, model_name):
     fpr, tpr, _ = roc_curve(y_test, y_scores)
     auc = roc_auc_score(y_test, y_scores)
 
-    fig, ax = plt.subplots(figsize=(8, 6))
+    fig, ax = plt.subplots(figsize=SMALL_FIGSIZE)
     ax.plot(fpr, tpr, label=f"AUC = {auc:.2f}", lw=2)
     ax.plot([0, 1], [0, 1], "k--", lw=1)  # Diagonal line for reference
     ax.set_xlabel("False Positive Rate")
     ax.set_ylabel("True Positive Rate")
-    ax.set_title(f"ROC Curve ({model_name})")
+    ax.set_title(f"ROC Curve ({model_name})", fontsize=10)
     ax.legend(loc="best")
     plt.tight_layout()
     return fig
