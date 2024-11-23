@@ -26,7 +26,7 @@ def load_models():
 # Load and preprocess data
 @st.cache_resource
 def load_and_prepare_data():
-    dataset_path = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\data\Injury_risk_prediction_dataset.csv"
+    dataset_path = "data/Injury_risk_prediction_dataset.csv"
     data = load_data(dataset_path)
     features, target, scaler = preprocess_data(data)
 
