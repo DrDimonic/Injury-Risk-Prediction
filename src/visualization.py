@@ -130,7 +130,7 @@ def plot_density(model, X_test, y_test, model_name):
     sns.kdeplot(positive_class_proba[y_test == 1], label='Class 1 (Injured)', fill=True, alpha=0.5, color='orange')
     plt.xlabel('Predicted Probability for Class 1')
     plt.ylabel('Density')
-    plt.title('Density Plot of Predicted Probabilities \n ({model_name})')
+    plt.title(f'Density Plot of Predicted Probabilities \n({model_name})')
     plt.legend()
     plt.tight_layout()
     plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
