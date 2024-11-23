@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
+
 # Plot the feature importances of the model.
 def plot_feature_importances(model, feature_names):
     importances = model.feature_importances_

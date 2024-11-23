@@ -2,12 +2,14 @@ from src.data_processing import load_data, preprocess_data
 from src.model_training import train_random_forest, train_logistic_regression, compare_models
 from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTE
+from src.visualization import plot_feature_importances, plot_predictions, plot_confusion_matrix, plot_actual_vs_predicted_histogram, plot_correlation_heatmap
+from sklearn.linear_model import LogisticRegression
 import joblib
 import os
 
 def main():
     # Define paths
-    dataset_path = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\data\Injury_risk_prevention.csv"
+    dataset_path = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\data\Injury_risk_prediction_dataset.csv"
     rf_model_save_path = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\models\trained_rf_model.pkl"
     logreg_model_save_path = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\models\trained_logreg_model.pkl"
     scaler_save_path = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\models\scaler.pkl"
@@ -44,6 +46,24 @@ def main():
     joblib.dump(scaler, scaler_save_path)
     print(f"Logistic Regression model saved to {logreg_model_save_path}")
     print(f"Scaler saved to {scaler_save_path}")
+
+     # Visualizations for Random Forest
+    print("Generating visualizations for Random Forest...")
+    feature_names = data.columns[:-1] 
+    plot_feature_importances(rf_model, feature_names)
+    plot_correlation_heatmap(data)
+    plot_predictions(rf_model, X_test, y_test)
+    plot_confusion_matrix(rf_model, X_test, y_test)
+    plot_actual_vs_predicted_histogram(rf_model, X_test, y_test)
+
+    # Visualizations for Logistic Regression
+    print("Generating visualizations for Logistic Regression...")
+    logreg = LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42)
+    logreg.fit(X_train, y_train)
+    plot_correlation_heatmap(data)
+    plot_predictions(logreg, X_test, y_test)
+    plot_confusion_matrix(logreg, X_test, y_test)
+    plot_actual_vs_predicted_histogram(logreg, X_test, y_test)
 
 if __name__ == "__main__":
     main()
