@@ -61,13 +61,19 @@ def plot_confusion_matrix(model, X_test, y_test):
     plt.show()
 
 # Overlayed Density plot of actual vs predicted values.
-def plot_density(y_test, y_pred_proba):
+def plot_density(model, X_test, y_test):
+    # Predict and extract probabilites
+    y_pred_proba = model.predict_proba(X_test)
+    positive_class_proba = y_pred_proba[:, 1]
+
+    # Overlayed density plot
     plt.figure(figsize=(8, 5))
-    sns.kdeplot(y_pred_proba[y_test == 0], label='Class 0', fill=True, alpha=0.5)
-    sns.kdeplot(y_pred_proba[y_test == 1], label='Class 1', fill=True, alpha=0.5)
-    plt.xlabel('Predicted Probability')
+    sns.kdeplot(positive_class_proba[y_test == 0], label='Class 0 (Not Injured)', fill=True, alpha=0.5, color='blue')
+    sns.kdeplot(positive_class_proba[y_test == 1], label='Class 1 (Injured)', fill=True, alpha=0.5, color='orange')
+    plt.xlabel('Predicted Probability for Class 1')
     plt.ylabel('Density')
     plt.title('Density Plot of Predicted Probabilities')
     plt.legend()
+    plt.tight_layout()
     plt.show()
 

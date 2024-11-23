@@ -47,11 +47,15 @@ def main():
     print(f"Logistic Regression model saved to {logreg_model_save_path}")
     print(f"Scaler saved to {scaler_save_path}")
 
-     # Visualizations for Random Forest
+    # Database Visualizations 
+    print("Generating Correlation Heatmap...")
+    plot_correlation_heatmap(data)
+
+
+    # Visualizations for Random Forest
     print("Generating visualizations for Random Forest...")
     feature_names = data.columns[:-1] 
     plot_feature_importances(rf_model, feature_names)
-    plot_correlation_heatmap(data)
     plot_predictions(rf_model, X_test, y_test)
     plot_confusion_matrix(rf_model, X_test, y_test)
     plot_density(rf_model, X_test, y_test)
@@ -60,7 +64,7 @@ def main():
     print("Generating visualizations for Logistic Regression...")
     logreg = LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42)
     logreg.fit(X_train, y_train)
-    plot_correlation_heatmap(data)
+    plot_feature_importances(logreg, feature_names)
     plot_predictions(logreg, X_test, y_test)
     plot_confusion_matrix(logreg, X_test, y_test)
     plot_density(logreg, X_test, y_test)
