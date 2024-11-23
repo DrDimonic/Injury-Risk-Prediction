@@ -54,8 +54,8 @@ def main():
     feature_names = data.columns[:-1] 
     plot_feature_importances(rf_model, feature_names)
     plot_scatter(rf_model, X_test, y_test) 
-    plot_correlation_heatmap(data) 
     plot_confusion_matrix(rf_model, X_test, y_test)
+    plot_correlation_heatmap(data) 
     plot_density(rf_model, X_test, y_test)
 
     # Visualizations for Logistic Regression

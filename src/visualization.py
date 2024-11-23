@@ -36,19 +36,11 @@ def plot_correlation_heatmap(data):
         linecolor='black'
     )
 
-# Bubble chart for actual vs predicted values.
-def plot_bubble_chart(model, X_test, y_test):
-    # Predict probabilities or labels
-    if hasattr(model, "predict_proba"):
-        y_pred = model.predict_proba(X_test)[:, 1]  # Use probabilities for the positive class
-    else:
-        y_pred = model.predict(X_test)
-
 # Actual vs Predicted values Scatter plot
 def plot_scatter(model, X_test, y_test):
    
     if hasattr(model, "predict_proba"):
-        y_pred = model.predict_proba(X_test)[:, 1]  # Use probabilities for positive class
+        y_pred = model.predict_proba(X_test)[:, 1]  
     else:
         y_pred = model.predict(X_test)
 
