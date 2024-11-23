@@ -76,6 +76,16 @@ data, X_train, X_test, y_train, y_test = load_and_prepare_data()
 if visualization == "Classification Report":
     if model_choice == "Random Forest":
         st.subheader("Classification Report (Random Forest)")
+        fig = plot_classification_report(model, X_test, y_test, scaler)
+        st.pyplot(fig)
+    else:
+        st.subheader("Classification Report (Logistic Regression)")
+        fig = plot_classification_report(model, X_test, y_test, scaler)
+        st.pyplot(fig)
+
+if visualization == "Classification Report":
+    if model_choice == "Random Forest":
+        st.subheader("Classification Report (Random Forest)")
         st.text(evaluate_model(rf_model, X_test, y_test))  # Display as plain text
     else:
         st.subheader("Classification Report (Logistic Regression)")
@@ -116,12 +126,6 @@ elif visualization == "ROC Curve":
     else:
         fig = plot_roc_curve(logreg_model, X_test, y_test, "Logistic Regression")
     st.pyplot(fig)
-
-elif visualization == "Classification Report":
-    if visualization == "Classification Report":
-        st.subheader(f"Classification Report ({model_name})")
-        fig = plot_classification_report(model, X_test, y_test, model_name, scaler)
-        st.pyplot(fig)
 
 elif visualization == "3D Predictions Scatterplot (Logistic Regression Only)":
     if model_choice == "Logistic Regression":

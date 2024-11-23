@@ -174,7 +174,7 @@ def plot_roc_curve(model, X_test, y_test, model_name):
     plt.tight_layout()
     return fig
 
-def plot_classification_report(model, X_test, y_test, model_name, scaler=None):
+def plot_classification_report(model, X_test, y_test, scaler=None):
     # Apply scaling if required
     if scaler:
         X_test = scaler.transform(X_test)
