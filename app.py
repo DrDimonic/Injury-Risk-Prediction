@@ -1,4 +1,5 @@
 import streamlit as st
+import sys
 from src.data_processing import load_data, preprocess_data
 from src.model_training import train_random_forest, train_logistic_regression, evaluate_model
 from src.visualization import (
@@ -17,6 +18,17 @@ import joblib
 import matplotlib.pyplot as plt
 import io
 import os
+
+# Add an "Exit" button in the sidebar
+def quit_app():
+    st.warning("The application has been stopped.")
+    sys.exit()
+
+st.set_page_config(page_title="Injury Risk Prediction Dashboard", layout="wide")
+
+st.sidebar.header("Injury Risk Prediction")
+if st.sidebar.button("Exit"):
+    quit_app()
 
 # Path definitions
 DATASET_PATH = r"C:\Users\domin\Data Mining Project\Injury-Risk-Prediction\data\Injury_risk_prediction_dataset.csv"
