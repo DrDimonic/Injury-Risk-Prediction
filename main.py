@@ -1,5 +1,5 @@
 from src.data_processing import load_data, preprocess_data
-from src.model_training import train_random_forest, train_logistic_regression, compare_models
+from src.model_training import train_random_forest, train_logistic_regression, compare_models, evaluate_model
 from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTE
 from src.visualization import plot_feature_importances, plot_scatter, plot_3d_predictions, plot_confusion_matrix, plot_density, plot_correlation_heatmap
@@ -23,7 +23,7 @@ def main():
     
     # Preprocess the dataset with L1 normalization
     print("Preprocessing dataset with L1 normalization...")
-    features, target = preprocess_data(data)
+    features, target, scaler = preprocess_data(data)
 
     # Balance the dataset
     print("Balancing the dataset using SMOTE...")
@@ -37,23 +37,27 @@ def main():
     print("\nComparing Random Forest and Logistic Regression models...")
     compare_models(X_train, y_train, X_test, y_test)
 
-    # Train and save models individually
-    print("\nSaving models...")
+    # Train Random Forest model
+    print("Training the Random Forest model...")
     rf_model = train_random_forest(X_train, y_train)
+    evaluate_model(rf_model, X_test, y_test)
+
+    # Save Random Forest model
     joblib.dump(rf_model, rf_model_save_path)
     print(f"Random Forest model saved to {rf_model_save_path}")
 
-    logreg_model = train_logistic_regression(X_train, y_train)
-    joblib.dump(logreg_model, logreg_model_save_path)
-    joblib.dump(scaler, scaler_save_path)
-    print(f"Logistic Regression model saved to {logreg_model_save_path}")
-    print(f"Scaler saved to {scaler_save_path}")
+    # Train Logistic Regression model
+    print("Training the Logistic Regression model...")
     logreg_model, scaler = train_logistic_regression(X_train, y_train)
+    evaluate_model(logreg_model, X_test, y_test, scaler)
+
+    # Save Logistic Regression model and scaler
     joblib.dump(logreg_model, logreg_model_save_path)
     joblib.dump(scaler, scaler_save_path)
     print(f"Logistic Regression model saved to {logreg_model_save_path}")
     print(f"Scaler saved to {scaler_save_path}")
-
+    
+    # Correlation Heatmap
     print("Generating Correlation Heatmap...")
     plot_correlation_heatmap(data) 
 

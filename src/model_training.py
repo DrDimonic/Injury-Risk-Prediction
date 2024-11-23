@@ -1,7 +1,7 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, confusion_matrix
-from sklearn.model_selection import cross_val_score
+from sklearn.preprocessing import StandardScaler
 
 # Train Random Forest model.
 def train_random_forest(X_train, y_train):
@@ -11,9 +11,15 @@ def train_random_forest(X_train, y_train):
 
 # Train Logistic Regression model.
 def train_logistic_regression(X_train, y_train):
+    # Apply Standard Scaling
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+
+    # Train the model
     logreg = LogisticRegression(solver='lbfgs', max_iter=10000, class_weight='balanced', random_state=42)
-    logreg.fit(X_train, y_train)
-    return logreg
+    logreg.fit(X_train_scaled, y_train)
+
+    return logreg, scaler
 
 # Evaluate the model using test data.
 def evaluate_model(model, X_test, y_test):
