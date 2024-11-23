@@ -18,7 +18,7 @@ def get_figure_number():
     return figure_counter
 
 # Plot the feature importances of the model.
-def plot_feature_importances(model, feature_names):
+def plot_feature_importances(model, feature_names, model_name):
     global figure_counter
     importances = model.feature_importances_
     indices = np.argsort(importances)[::-1]
@@ -56,7 +56,7 @@ def plot_correlation_heatmap(data):
     increment_figure_counter()
 
 # Actual vs Predicted values Scatter plot
-def plot_scatter(model, X_test, y_test):
+def plot_scatter(model, X_test, y_test, model_name):
     global figure_counter
     if hasattr(model, "predict_proba"):
         y_pred = model.predict_proba(X_test)[:, 1]  
@@ -74,7 +74,7 @@ def plot_scatter(model, X_test, y_test):
     plt.show()
     increment_figure_counter()
 
-def plot_3d_predictions(model, X_test, y_test, feature_names):
+def plot_3d_predictions(model, X_test, y_test, feature_names, model_name):
     global figure_counter
     # Ensure valid features for plotting
     if len(feature_names) < 2:
@@ -106,7 +106,7 @@ def plot_3d_predictions(model, X_test, y_test, feature_names):
     increment_figure_counter()
 
 # Plot the confusion matrix.
-def plot_confusion_matrix(model, X_test, y_test):
+def plot_confusion_matrix(model, X_test, y_test, model_name):
     global figure_counter
     cm = confusion_matrix(y_test, model.predict(X_test))
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
@@ -118,7 +118,7 @@ def plot_confusion_matrix(model, X_test, y_test):
     increment_figure_counter()
 
 # Overlayed Density plot of actual vs predicted values.
-def plot_density(model, X_test, y_test):
+def plot_density(model, X_test, y_test, model_name):
     global figure_counter
     # Predict and extract probabilites
     y_pred_proba = model.predict_proba(X_test)
@@ -138,7 +138,7 @@ def plot_density(model, X_test, y_test):
     increment_figure_counter()
 
 # Plot precision-recall curve
-def plot_precision_recall_curve(model, X_test, y_test):
+def plot_precision_recall_curve(model, X_test, y_test, model_name):
     global figure_counter
     if hasattr(model, "predict_proba"):
         y_scores = model.predict_proba(X_test)[:, 1]
@@ -161,7 +161,7 @@ def plot_precision_recall_curve(model, X_test, y_test):
     increment_figure_counter()
 
 # Plot ROC curve
-def plot_roc_curve(model, X_test, y_test):
+def plot_roc_curve(model, X_test, y_test, model_name):
     global figure_counter
     if hasattr(model, "predict_proba"):
         y_scores = model.predict_proba(X_test)[:, 1]

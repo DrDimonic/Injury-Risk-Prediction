@@ -63,20 +63,20 @@ def main():
     # Visualizations for Random Forest
     print("Generating visualizations for Random Forest...")
     feature_names = data.columns[:-1] 
-    plot_feature_importances(rf_model, feature_names)
-    plot_scatter(rf_model, X_test, y_test) 
-    plot_confusion_matrix(rf_model, X_test, y_test)
-    plot_density(rf_model, X_test, y_test)
-    plot_precision_recall_curve(rf_model, X_test, y_test)
-    plot_roc_curve(rf_model, X_test, y_test)
+    plot_feature_importances(rf_model, feature_names, "Random Forest")
+    plot_scatter(rf_model, X_test, y_test, "Random Forest") 
+    plot_confusion_matrix(rf_model, X_test, y_test, "Random Forest")
+    plot_density(rf_model, X_test, y_test, "Random Forest")
+    plot_precision_recall_curve(rf_model, X_test, y_test, "Random Forest")
+    plot_roc_curve(rf_model, X_test, y_test, "Random Forest")
     
     # Visualizations for Logistic Regression
     print("Generating visualizations for Logistic Regression...")
-    plot_3d_predictions(logreg_model, X_test, y_test, feature_names)
-    plot_confusion_matrix(logreg_model, X_test, y_test)
-    plot_density(logreg_model, X_test, y_test)
-    plot_precision_recall_curve(logreg_model, X_test, y_test)
-    plot_roc_curve(logreg_model, X_test, y_test)
+    plot_3d_predictions(logreg_model, X_test, y_test, feature_names, "Logistic Regression")
+    plot_confusion_matrix(logreg_model, X_test, y_test, "Logistic Regression")
+    plot_density(logreg_model, X_test, y_test, "Logistic Regression")
+    plot_precision_recall_curve(logreg_model, X_test, y_test, "Logistic Regression")
+    plot_roc_curve(logreg_model, X_test, y_test, "Logistic Regression")
 
 if __name__ == "__main__":
     main()
