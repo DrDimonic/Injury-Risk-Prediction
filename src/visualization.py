@@ -23,7 +23,8 @@ def plot_feature_importances(model, feature_names, model_name):
     importances = model.feature_importances_
     indices = np.argsort(importances)[::-1]
     sorted_feature_names = [feature_names[i] for i in indices]
-    
+    fig, ax = plt.subplots(figsize=(10, 6))
+
     plt.figure(figsize=(10, 6))
     plt.barh(sorted_feature_names, importances[indices])
     plt.xlabel('Importance')
@@ -31,8 +32,8 @@ def plot_feature_importances(model, feature_names, model_name):
     plt.title(f'Feature Importances \n({model_name})')
     plt.tight_layout()
     plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
-    plt.show()
     increment_figure_counter()
+    return fig
 
 # Plot a correlation heatmap
 def plot_correlation_heatmap(data):
@@ -110,12 +111,13 @@ def plot_confusion_matrix(model, X_test, y_test, model_name):
     global figure_counter
     cm = confusion_matrix(y_test, model.predict(X_test))
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
+    fig, ax = plt.subplots(figsize=(8, 6))
     disp.plot(cmap=plt.cm.Blues)
     plt.title(f'Confusion Matrix \n({model_name})')
     plt.tight_layout()
     plt.gcf().canvas.manager.set_window_title(f"Figure {get_figure_number()}")
-    plt.show()
     increment_figure_counter()
+    return fig
 
 # Overlayed Density plot of actual vs predicted values.
 def plot_density(model, X_test, y_test, model_name):
