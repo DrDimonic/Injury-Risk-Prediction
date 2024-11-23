@@ -21,14 +21,6 @@ def plot_feature_importances(model, feature_names):
     plt.tight_layout()
     plt.show()
 
-# Bubble chart for actual vs predicted values.
-def plot_bubble_chart(model, X_test, y_test):
-    # Predict probabilities or labels
-    if hasattr(model, "predict_proba"):
-        y_pred = model.predict_proba(X_test)[:, 1]  # Use probabilities for the positive class
-    else:
-        y_pred = model.predict(X_test)
-
 # Plot a correlation heatmap
 def plot_correlation_heatmap(data):
     correlation_matrix = data.corr()
@@ -43,6 +35,14 @@ def plot_correlation_heatmap(data):
         linewidths=0.5,
         linecolor='black'
     )
+
+# Bubble chart for actual vs predicted values.
+def plot_bubble_chart(model, X_test, y_test):
+    # Predict probabilities or labels
+    if hasattr(model, "predict_proba"):
+        y_pred = model.predict_proba(X_test)[:, 1]  # Use probabilities for the positive class
+    else:
+        y_pred = model.predict(X_test)
 
     # Choose a feature to represent bubble size (Minutes)
     bubble_size = X_test[:, 0] if isinstance(X_test, np.ndarray) else X_test.iloc[:, 0]
