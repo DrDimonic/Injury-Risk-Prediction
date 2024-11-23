@@ -21,12 +21,16 @@ def main():
         print("Dataset could not be loaded.")
         return
 
+    print("Initial Dataset Columns:", data.columns.tolist())
+
     features, target = preprocess_data(data)
 
     # Balance the dataset
     print("Balancing the dataset using SMOTE...")
     smote = SMOTE(random_state=42)
     X_balanced, y_balanced = smote.fit_resample(features, target)
+
+    print("Final Feature Columns Used for Training:", features.columns.tolist())
 
     # Train-test split
     X_train, X_test, y_train, y_test = train_test_split(X_balanced, y_balanced, test_size=0.3, random_state=42)
@@ -49,6 +53,7 @@ def main():
 
     # Database Visualizations 
     print("Generating Correlation Heatmap...")
+    feature_names = data.columns[:-1] 
     plot_correlation_heatmap(data)
 
 
@@ -67,6 +72,9 @@ def main():
     plot_3d_predictions(logreg_model, X_test, y_test, feature_names)
     plot_confusion_matrix(logreg, X_test, y_test)
     plot_density(logreg, X_test, y_test)
+
+    feature_names = features.columns.tolist()
+    print("Feature Names:", feature_names)
 
 if __name__ == "__main__":
     main()

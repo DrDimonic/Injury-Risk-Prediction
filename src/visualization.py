@@ -63,9 +63,10 @@ def plot_scatter(model, X_test, y_test):
 
 
 def plot_3d_predictions(model, X_test, y_test, feature_names):
-    # Ensure enough features for a 3D plot
-    if len(feature_names) < 2:
-        print("3D plot requires at least two features.")
+   # Ensure valid features for plotting
+    valid_features = [f for f in feature_names if f != "Unnamed: 0"]
+    if len(valid_features) < 2:
+        print("3D plot requires at least two valid features.")
         return
 
     # Predict probabilities
