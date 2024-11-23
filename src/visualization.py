@@ -7,9 +7,19 @@ from mpl_toolkits.mplot3d import Axes3D
 from sklearn.metrics import precision_recall_curve, average_precision_score
 from sklearn.metrics import roc_curve, roc_auc_score
 
+# Global figure counter
+figure_counter = 1
+
+def increment_figure_counter():
+    global figure_counter
+    figure_counter += 1
+
+def get_figure_number():
+    return figure_counter
 
 # Plot the feature importances of the model.
 def plot_feature_importances(model, feature_names):
+    global figure_counter
     importances = model.feature_importances_
     indices = np.argsort(importances)[::-1]
     sorted_feature_names = [feature_names[i] for i in indices]
@@ -18,12 +28,13 @@ def plot_feature_importances(model, feature_names):
     plt.barh(sorted_feature_names, importances[indices])
     plt.xlabel('Importance')
     plt.ylabel('Feature')
-    plt.title('Feature Importances')
+    plt.title(f'Figure {get_figure_number()}: Feature Importances')
     plt.tight_layout()
     plt.show()
 
 # Plot a correlation heatmap
 def plot_correlation_heatmap(data):
+    global figure_counter
     correlation_matrix = data.corr()
     plt.figure(figsize=(10, 8))
     sns.heatmap(
@@ -36,13 +47,13 @@ def plot_correlation_heatmap(data):
         linewidths=0.5,
         linecolor='black'
     )
-    plt.title('Correlation Heatmap')
+    plt.title(f'Figure {get_figure_number()}: Correlation Heatmap')
     plt.tight_layout()
     plt.show()  
 
 # Actual vs Predicted values Scatter plot
 def plot_scatter(model, X_test, y_test):
-   
+    global figure_counter
     if hasattr(model, "predict_proba"):
         y_pred = model.predict_proba(X_test)[:, 1]  
     else:
@@ -52,13 +63,14 @@ def plot_scatter(model, X_test, y_test):
     plt.scatter(y_test, y_pred, alpha=0.7, c='blue', edgecolors='k')
     plt.xlabel('Actual Values')
     plt.ylabel('Predicted Values')
-    plt.title('Scatter Plot: Predicted vs Actual')
+    plt.title(f'Figure {get_figure_number()}: Scatter Plot: Predicted vs Actual')
     plt.grid(True)
     plt.tight_layout()
     plt.show()
 
 
 def plot_3d_predictions(model, X_test, y_test, feature_names):
+    global figure_counter
     # Ensure valid features for plotting
     if len(feature_names) < 2:
         print("3D plot requires at least two features.")
@@ -82,21 +94,23 @@ def plot_3d_predictions(model, X_test, y_test, feature_names):
     ax.set_ylabel(feature_names[1])
     ax.set_zlabel('Predicted Probabilities')
     plt.colorbar(scatter, label='Actual Class')
-    plt.title('3D Scatter Plot: Predictions')
+    plt.title(f'Figure {get_figure_number()}: 3D Scatter Plot: Predictions')
     plt.tight_layout()
     plt.show()  
 
 # Plot the confusion matrix.
 def plot_confusion_matrix(model, X_test, y_test):
+    global figure_counter
     cm = confusion_matrix(y_test, model.predict(X_test))
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
     disp.plot(cmap=plt.cm.Blues)
-    plt.title('Confusion Matrix')
+    plt.title(f'Figure {get_figure_number()}: Confusion Matrix')
     plt.tight_layout()
     plt.show()
 
 # Overlayed Density plot of actual vs predicted values.
 def plot_density(model, X_test, y_test):
+    global figure_counter
     # Predict and extract probabilites
     y_pred_proba = model.predict_proba(X_test)
     positive_class_proba = y_pred_proba[:, 1]
@@ -107,13 +121,14 @@ def plot_density(model, X_test, y_test):
     sns.kdeplot(positive_class_proba[y_test == 1], label='Class 1 (Injured)', fill=True, alpha=0.5, color='orange')
     plt.xlabel('Predicted Probability for Class 1')
     plt.ylabel('Density')
-    plt.title('Density Plot of Predicted Probabilities')
+    plt.title(f'Figure {get_figure_number()}: Density Plot of Predicted Probabilities')
     plt.legend()
     plt.tight_layout()
     plt.show()
 
 # Plot precision-recall curve
-def plot_precision_recall_curve(model, X_test, y_test, title):
+def plot_precision_recall_curve(model, X_test, y_test):
+    global figure_counter
     if hasattr(model, "predict_proba"):
         y_scores = model.predict_proba(X_test)[:, 1]
     else:
@@ -126,14 +141,15 @@ def plot_precision_recall_curve(model, X_test, y_test, title):
     plt.plot(recall, precision, label=f'Avg Precision = {avg_precision:.2f}', lw=2)
     plt.xlabel('Recall')
     plt.ylabel('Precision')
-    plt.title(title)
+    plt.title(f'Figure {get_figure_number()}: Precision-Recall Curve')
     plt.legend(loc="best")
     plt.grid(True)
     plt.tight_layout()
     plt.show()
 
 # Plot ROC curve
-def plot_roc_curve(model, X_test, y_test, title):
+def plot_roc_curve(model, X_test, y_test):
+    global figure_counter
     if hasattr(model, "predict_proba"):
         y_scores = model.predict_proba(X_test)[:, 1]
     else:
@@ -147,7 +163,7 @@ def plot_roc_curve(model, X_test, y_test, title):
     plt.plot([0, 1], [0, 1], 'k--', lw=1)  # Diagonal line for reference
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    plt.title(title)
+    plt.title(f'Figure {get_figure_number()}: ROC Curve')
     plt.legend(loc="best")
     plt.grid(True)
     plt.tight_layout()
