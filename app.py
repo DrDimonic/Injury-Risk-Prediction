@@ -64,10 +64,6 @@ visualization = st.sidebar.selectbox(
     ],
 )
 
-# Exit button
-if st.sidebar.button("Exit"):
-    st.stop()
-
 # Load data and models
 rf_model, logreg_model, scaler = load_models()
 data, X_train, X_test, y_train, y_test = load_and_prepare_data()
@@ -76,20 +72,12 @@ data, X_train, X_test, y_train, y_test = load_and_prepare_data()
 if visualization == "Classification Report":
     if model_choice == "Random Forest":
         st.subheader("Classification Report (Random Forest)")
-        fig = plot_classification_report(rf_model, X_test, y_test, scaler)
+        fig = plot_classification_report(rf_model, X_test, y_test, "Random Forest", scaler)
         st.pyplot(fig)
     else:
         st.subheader("Classification Report (Logistic Regression)")
-        fig = plot_classification_report(logreg_model, X_test, y_test, scaler)
+        fig = plot_classification_report(logreg_model, X_test, y_test, "Logistic Regression", scaler)
         st.pyplot(fig)
-
-if visualization == "Classification Report":
-    if model_choice == "Random Forest":
-        st.subheader("Classification Report (Random Forest)")
-        st.text(evaluate_model(rf_model, X_test, y_test))  # Display as plain text
-    else:
-        st.subheader("Classification Report (Logistic Regression)")
-        st.text(evaluate_model(logreg_model, X_test, y_test, scaler))
 
 elif visualization == "Confusion Matrix":
     if model_choice == "Random Forest":

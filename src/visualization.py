@@ -187,8 +187,11 @@ def plot_classification_report(model, X_test, y_test, model_name, scaler=None):
     # Create a figure to display the report
     fig, ax = plt.subplots(figsize=(8, 6))
     ax.axis("off")  # Hide the axes
-    ax.text(0, 1, f"Classification Report\n({model_name})", fontsize=10, weight="bold", ha="left")
-    ax.text(0, 0.95, report, fontsize=8, ha="left", family="monospace", transform=ax.transAxes)
+
+    # Add the title above the report
+    ax.text(0.5, 1.1, f"Classification Report\n({model_name})", fontsize=12, weight="bold", ha="center", transform=ax.transAxes)
+    ax.text(0.5, 0.5, report, fontsize=10, ha="center", va="center", family="monospace", transform=ax.transAxes)
 
     plt.tight_layout()
     return fig
+
